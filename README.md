@@ -1,1 +1,1 @@
-#NodeJS lib to MaxiPago Gateway
+#NodeJS lib for MaxiPago Gateway
