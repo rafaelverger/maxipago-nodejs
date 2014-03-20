@@ -6,11 +6,11 @@ var _buildGateway = function(){
       return new maxipago.Gateway(testMerchantId, testMerchantKey, true);
     },
     _basicClient = function() {
-      var time = new Date().getTime();
+      var now = new Date().getTime();
       return {
-        customerIdExt: time,
+        customerIdExt: now,
         firstName: "Fulano",
-        lastName: "De Tal " + time
+        lastName: "De Tal " + now
       };
     },
     _fullClient = function() {
@@ -27,30 +27,36 @@ var _buildGateway = function(){
       client.sex = 'M';
       return client;
     },
-    _buildPayData = function(forValidSale) {
-      var time = new Date().getTime();
+    _basicSale = function(customerId, forValidSale) {
+      var now = new Date().getTime();
       return {
-        client: {
-          firstName: "Fulano",
-          lastName: "De Tal " + time,
-          customerIdExt: time,
+        processorID: '1',
+        referenceNum: "PONumber-" + now,
+        billing: {
+          name: "Test Credit Card"
         },
-        order: {
-          total: forValidSale ? "10.00" : "15.33",
-          code: "PONumber-" + time
+        transactionDetail: {
+          payType: {
+            creditCard: {
+              number: "4111111111111111",
+              expMonth: "12",
+              expYear: "2020",
+              cvvNumber: "999",
+            }
+          }
         },
-        creditCard: {
-          number: "4111111111111111",
-          expMonth: "12",
-          expYear: "2020",
-          cvvNumber: "999",
-          fullname: "Test Credit Card"
+        payment: {
+          currencyCode: 'BRL',
+          chargeTotal: forValidSale ? "10.00" : "15.33"
+        },
+        saveOnFile: {
+          customerToken: customerId
         }
       };
     }
 ;
 
-exports.buildGateway = _buildGateway,
-exports.buildPayData = _buildPayData,
-exports.basicClient = _basicClient,
-exports.fullClient = _fullClient
+exports.buildGateway = _buildGateway;
+exports.basicClient = _basicClient;
+exports.fullClient = _fullClient;
+exports.basicSale = _basicSale;
