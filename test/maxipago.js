@@ -1,8 +1,4 @@
-var maxipago = require('../lib/maxipago');
-
-var testMerchantId = 100,
-    testMerchantKey = '',
-    mpGateway = new maxipago.Gateway(testMerchantId, testMerchantKey, true);
+var mpGateway = require('./index').buildGateway();
 
 var _buildPayData = function(forValidSale) {
   var time = new Date().getTime();
