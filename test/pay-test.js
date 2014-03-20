@@ -6,8 +6,7 @@ var _buildPayData = function(forValidSale) {
     client: {
       firstName: "Fulano",
       lastName: "De Tal " + time,
-      email: "test-" + time + "@server.com",
-      id: time
+      customerIdExt: time,
     },
     order: {
       total: forValidSale ? "10.00" : "15.33",
@@ -33,6 +32,7 @@ exports.testGatewayPaySuccess = function(test){
     payData.order,
     payData.creditCard,
     function(err, mp_err, data){
+      console.log(err, mp_err, data);
       test.ok(!err);
       test.ok(!mp_err);
 
