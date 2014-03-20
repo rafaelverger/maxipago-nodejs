@@ -1,29 +1,8 @@
-var mpGateway = require('./index').buildGateway();
-
-var _buildPayData = function(forValidSale) {
-  var time = new Date().getTime();
-  return {
-    client: {
-      firstName: "Fulano",
-      lastName: "De Tal " + time,
-      customerIdExt: time,
-    },
-    order: {
-      total: forValidSale ? "10.00" : "15.33",
-      code: "PONumber-" + time
-    },
-    creditCard: {
-      number: "4111111111111111",
-      expMonth: "12",
-      expYear: "2020",
-      cvvNumber: "999",
-      fullname: "Test Credit Card"
-    }
-  };
-};
+var util = require('./index'),
+    mpGateway = util.buildGateway();
 
 exports.testPaySuccess = function(test){
-  var payData = _buildPayData(true);
+  var payData = util.buildPayData(true);
 
   test.expect(15);
 
@@ -32,7 +11,6 @@ exports.testPaySuccess = function(test){
     payData.order,
     payData.creditCard,
     function(err, mp_err, data){
-      console.log(err, mp_err, data);
       test.ok(!err);
       test.ok(!mp_err);
 
@@ -58,7 +36,7 @@ exports.testPaySuccess = function(test){
 };
 
 exports.testPayFailed = function(test){
-  var payData = _buildPayData(false);
+  var payData = util.buildPayData(false);
 
   test.expect(16);
 

@@ -1,32 +1,8 @@
-var mpGateway = require('./index').buildGateway();
-
-var _basicClient = function() {
-  var time = new Date().getTime();
-  return {
-    customerIdExt: time,
-    firstName: "Fulano",
-    lastName: "De Tal " + time
-  };
-};
-
-var _fullClient = function() {
-  var time = new Date().getTime();
-  var client = _basicClient();
-  client.address1 = 'Rua Desconhecida, s/n';
-  client.address2 = 'Casa 0';
-  client.city = 'Desaparecida';
-  client.state = 'BA';
-  client.zip = '123000-456';
-  client.country = 'BR';
-  client.phone = '+5511990090009';
-  client.email = 'email@server.com';
-  client.dob = '01/01/1970';
-  client.sex = 'M';
-  return client;
-};
+var util = require('./index'),
+    mpGateway = util.buildGateway();
 
 exports.testSaveBasicClient = function(test){
-  var client = _basicClient();
+  var client = util.basicClient();
 
   test.expect(7);
 
@@ -49,7 +25,7 @@ exports.testSaveBasicClient = function(test){
 };
 
 exports.testSaveFullClient = function(test){
-  var client = _fullClient();
+  var client = util.fullClient();
 
   test.expect(7);
 
@@ -72,7 +48,7 @@ exports.testSaveFullClient = function(test){
 };
 
 exports.testSaveUnorderedClient = function(test){
-  var client = _fullClient(),
+  var client = util.fullClient(),
       unordered_client = {};
 
   Object.keys(client).reverse().forEach(function(key){
