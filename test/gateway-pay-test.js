@@ -22,7 +22,7 @@ var _buildPayData = function(forValidSale) {
   };
 };
 
-exports.testGatewayPaySuccess = function(test){
+exports.testPaySuccess = function(test){
   var payData = _buildPayData(true);
 
   test.expect(15);
@@ -57,7 +57,7 @@ exports.testGatewayPaySuccess = function(test){
   );
 };
 
-exports.testGatewayPayFailed = function(test){
+exports.testPayFailed = function(test){
   var payData = _buildPayData(false);
 
   test.expect(16);
