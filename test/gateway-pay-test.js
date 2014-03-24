@@ -1,17 +1,17 @@
 var util = require('./index'),
     mpGateway = util.buildGateway();
 
-exports.testPaySuccess = function(test){
+exports.testPaySuccess = function(test) {
   test.expect(16);
 
   var client = util.basicClient();
-  mpGateway.saveClient(client, function(err, mp_err, data){
+  mpGateway.saveClient(client, function(err, mp_err, data) {
     var cId = data.result.customerId,
         sale = util.basicSale(cId, true);
 
     mpGateway.pay(
       sale,
-      function(err, mp_err, data){
+      function(err, mp_err, data) {
         test.ok(!err);
         test.ok(!mp_err);
 
@@ -38,17 +38,17 @@ exports.testPaySuccess = function(test){
   });
 };
 
-exports.testPayFailed = function(test){
+exports.testPayFailed = function(test) {
   test.expect(16);
 
   var client = util.basicClient();
-  mpGateway.saveClient(client, function(err, mp_err, data){
+  mpGateway.saveClient(client, function(err, mp_err, data) {
     var cId = data.result.customerId,
         sale = util.basicSale(cId, false);
 
     mpGateway.pay(
       sale,
-      function(err, mp_err, data){
+      function(err, mp_err, data) {
         test.ok(!err);
         test.ok(!mp_err);
 

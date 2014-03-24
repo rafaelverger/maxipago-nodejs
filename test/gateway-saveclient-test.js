@@ -1,14 +1,14 @@
 var util = require('./index'),
     mpGateway = util.buildGateway();
 
-exports.testSaveBasicClient = function(test){
+exports.testSaveBasicClient = function(test) {
   var client = util.basicClient();
 
   test.expect(7);
 
   mpGateway.saveClient(
     client,
-    function(err, mp_err, data){
+    function(err, mp_err, data) {
       test.ok(!err);
       test.ok(!mp_err);
 
@@ -24,14 +24,14 @@ exports.testSaveBasicClient = function(test){
   );
 };
 
-exports.testSaveFullClient = function(test){
+exports.testSaveFullClient = function(test) {
   var client = util.fullClient();
 
   test.expect(7);
 
   mpGateway.saveClient(
     client,
-    function(err, mp_err, data){
+    function(err, mp_err, data) {
       test.ok(!err);
       test.ok(!mp_err);
 
@@ -47,11 +47,11 @@ exports.testSaveFullClient = function(test){
   );
 };
 
-exports.testSaveUnorderedClient = function(test){
+exports.testSaveUnorderedClient = function(test) {
   var client = util.fullClient(),
       unordered_client = {};
 
-  Object.keys(client).reverse().forEach(function(key){
+  Object.keys(client).reverse().forEach(function(key) {
     unordered_client[key] = client[key];
   });
 
@@ -59,7 +59,7 @@ exports.testSaveUnorderedClient = function(test){
 
   mpGateway.saveClient(
     unordered_client,
-    function(err, mp_err, data){
+    function(err, mp_err, data) {
       test.ok(!err);
       test.ok(!mp_err);
 
