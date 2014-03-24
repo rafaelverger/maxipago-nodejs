@@ -53,6 +53,21 @@ var _buildGateway = function() {
           customerToken: customerId
         }
       };
+    },
+    _basicAddCard = function(customerId) {
+      return {
+        customerId: customerId,
+        creditCardNumber: '4111111111111111',
+        expirationMonth: 12,
+        expirationYear: 2020,
+        billingName: 'Test Credit Card'
+      };
+    },
+    _basicDeleteCard = function(customerId, token) {
+      return {
+        customerId: customerId,
+        token: token
+      };
     }
 ;
 
@@ -60,3 +75,5 @@ exports.buildGateway = _buildGateway;
 exports.basicClient = _basicClient;
 exports.fullClient = _fullClient;
 exports.basicSale = _basicSale;
+exports.basicAddCard = _basicAddCard;
+exports.basicDeleteCard = _basicDeleteCard;
