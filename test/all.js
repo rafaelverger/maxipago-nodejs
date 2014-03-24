@@ -1,9 +1,9 @@
-var fs = require('fs'),
-    nodeunit = require('nodeunit'),
+var nodeunit = require('nodeunit'),
     reporter = nodeunit.reporters['default'],
-    testFiles = fs.readdirSync(__dirname).filter(function(file){
-      return /.+-test\.js/.test(file);
-    });
+    exec = require('child_process').exec;
 
 process.chdir(__dirname);
-reporter.run(testFiles);
+exec('find . -name "*test.js"', function(err, stdout, stderr) {
+  var testFiles = stdout.trim().split('\n');
+  reporter.run(testFiles);
+});

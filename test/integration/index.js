@@ -1,4 +1,4 @@
-var maxipago = require('../lib/maxipago'),
+var maxipago = require('../../lib/maxipago'),
     testMerchantId = 100,
     testMerchantKey = '';
 
