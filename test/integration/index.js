@@ -1,6 +1,6 @@
 var maxipago = require('../../lib/maxipago'),
     testMerchantId = 100,
-    testMerchantKey = '';
+    testMerchantKey = process.env.MP_TEST_KEY;
 
 var _buildGateway = function(){
       return new maxipago.Gateway(testMerchantId, testMerchantKey, true);
