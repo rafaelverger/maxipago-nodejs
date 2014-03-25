@@ -3,9 +3,9 @@ var proxyquire = require('proxyquire'),
     assert = require('assert'),
     models = require('../../lib/models');
 
-describe('utils', function(){
-  describe('#formatObject', function(){
-    it('return obj with only allowed attributes in correct order', function(){
+describe('utils', function() {
+  describe('#formatObject', function() {
+    it('return obj with only allowed attributes in correct order', function() {
 
       var strict_obj = {
             a: undefined,
@@ -42,21 +42,20 @@ describe('utils', function(){
     });
   });
 
-  describe('build XML helpers', function(){
+  describe('build XML helpers', function() {
     var sandbox,
         xml2js,
         fn_buildObj,
         formattedObj,
         fn_formatObject,
-        mp_utils
-    ;
+        mp_utils;
 
-    before(function(){
+    before(function() {
       sandbox = sinon.sandbox.create();
 
       fn_buildObj = sandbox.spy();
       xml2js = {
-        Builder: sandbox.spy(function(){
+        Builder: sandbox.spy(function() {
           return {buildObject: fn_buildObj};
         })
       };
@@ -68,7 +67,7 @@ describe('utils', function(){
       fn_formatObject.returns(formattedObj);
     });
 
-    after(function(){
+    after(function() {
       sandbox.restore();
     });
 
@@ -97,4 +96,3 @@ describe('utils', function(){
 
   });
 });
-
