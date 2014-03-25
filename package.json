@@ -1,6 +1,6 @@
 {
   "name": "maxipago",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "A NodeJS lib for MaxiPago Gateway",
   "contributors": [
     {
@@ -14,10 +14,10 @@
       "url": "https://github.com/andersonba"
     }
   ],
-  "homepage": "https://github.com/rafaelverger/maxipago",
+  "homepage": "https://github.com/rafaelverger/maxipago-nodejs",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rafaelverger/maxipago.git"
+    "url": "https://github.com/rafaelverger/maxipago-nodejs.git"
   },
   "directories": {
     "lib": "./lib"
