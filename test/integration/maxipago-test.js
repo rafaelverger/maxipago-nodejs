@@ -1,31 +1,31 @@
 var assert = require('assert'),
     index = require('./index');
 
-describe('maxipago.gateway', function(){
+describe('maxipago.gateway', function() {
   var start, count, itTimeout = 30000,
       mpGateway = null;
 
   this.timeout(itTimeout);
 
-  before(function(){
+  before(function() {
     count = 0;
     start = new Date().getTime();
 
     mpGateway = index.buildGateway();
   });
 
-  beforeEach(function(){
+  beforeEach(function() {
     count++;
   });
 
-  after(function(){
+  after(function() {
     var total = new Date().getTime() - start;
-    if ( total >= (0.25 * count * itTimeout) ) {
+    if (total >= (0.25 * count * itTimeout)) {
       console.warn('Test suite taken too long! ' + total + 'ms');
     }
   });
 
-  describe('#addCard', function(){
+  describe('#addCard', function() {
 
     it('add new card', function(done) {
       var client = index.basicClient();
@@ -78,39 +78,41 @@ describe('maxipago.gateway', function(){
       });
     });
   });
+  
+  describe('#deleteCard', function() {
+    it('delete existing card', function(done) {
 
-  it('#deleteCard', function(done) {
+      var client = index.basicClient();
+      mpGateway.saveClient(client, function(err, mp_err, data) {
+        var cId = data.result.customerId,
+            card = index.basicAddCard(cId);
 
-    var client = index.basicClient();
-    mpGateway.saveClient(client, function(err, mp_err, data) {
-      var cId = data.result.customerId,
-          card = index.basicAddCard(cId);
+        mpGateway.addCard(
+          card,
+          function(err, mp_err, data) {
+            var token = data.result.token,
+                card = index.basicDeleteCard(cId, token);
 
-      mpGateway.addCard(
-        card,
-        function(err, mp_err, data) {
-          var token = data.result.token,
-              card = index.basicDeleteCard(cId, token);
+            mpGateway.deleteCard(
+              card,
+              function(err, mp_err, data) {
+                assert.ok(!err);
+                assert.ok(!mp_err);
 
-          mpGateway.deleteCard(
-            card,
-            function(err, mp_err, data) {
-              assert.ok(!err);
-              assert.ok(!mp_err);
+                assert.equal(data.errorCode, '0');
+                assert.equal(data.errorMessage, '');
+                assert.equal(data.command, 'delete-card-onfile');
 
-              assert.equal(data.errorCode, '0');
-              assert.equal(data.errorMessage, '');
-              assert.equal(data.command, 'delete-card-onfile');
-
-              done();
-            }
-          );
-        }
-      );
+                done();
+              }
+            );
+          }
+        );
+      });
     });
   });
 
-  describe('#pay', function(){
+  describe('#pay', function() {
     it('success response', function(done) {
       var client = index.basicClient();
       mpGateway.saveClient(client, function(err, mp_err, data) {
@@ -185,7 +187,7 @@ describe('maxipago.gateway', function(){
     });
   });
 
-  describe('#saveClient', function(){
+  describe('#saveClient', function() {
     it('basic data', function(done) {
       var client = index.basicClient();
 
