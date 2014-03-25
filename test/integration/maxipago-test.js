@@ -112,14 +112,14 @@ describe('maxipago.gateway', function() {
     });
   });
 
-  describe('#pay', function() {
+  describe('#sale', function() {
     it('success response', function(done) {
       var client = index.basicClient();
       mpGateway.saveClient(client, function(err, mp_err, data) {
         var cId = data.result.customerId,
             sale = index.basicSale(cId, true);
 
-        mpGateway.pay(
+        mpGateway.sale(
           sale,
           function(err, mp_err, data) {
             assert.ok(!err);
@@ -154,7 +154,7 @@ describe('maxipago.gateway', function() {
         var cId = data.result.customerId,
             sale = index.basicSale(cId, false);
 
-        mpGateway.pay(
+        mpGateway.sale(
           sale,
           function(err, mp_err, data) {
             assert.ok(!err);
@@ -192,13 +192,13 @@ describe('maxipago.gateway', function() {
         var cId = data.result.customerId,
             sale = index.basicSale(cId, true);
 
-        mpGateway.pay(
+        mpGateway.sale(
           sale,
           function(err, mp_err, data) {
             var token = data['save-on-file'].token,
                 sale = index.saleUsingToken(cId, token);
 
-            mpGateway.pay(
+            mpGateway.sale(
               sale,
               function(err, mp_err, data) {
                 assert.ok(!err);
