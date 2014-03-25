@@ -54,6 +54,25 @@ var _buildGateway = function() {
         }
       };
     },
+    _saleWithToken = function(customerId, token) {
+      var now = new Date().getTime();
+      return {
+        processorID: '1',
+        referenceNum: 'PONumber-' + now,
+        transactionDetail: {
+          payType: {
+            onFile: {
+              customerId: customerId,
+              token: token
+            }
+          }
+        },
+        payment: {
+          currencyCode: 'BRL',
+          chargeTotal: '10.00'
+        }
+      };
+    },
     _basicAddCard = function(customerId) {
       return {
         customerId: customerId,
@@ -75,5 +94,6 @@ exports.buildGateway = _buildGateway;
 exports.basicClient = _basicClient;
 exports.fullClient = _fullClient;
 exports.basicSale = _basicSale;
+exports.saleWithToken = _saleWithToken;
 exports.basicAddCard = _basicAddCard;
 exports.basicDeleteCard = _basicDeleteCard;
