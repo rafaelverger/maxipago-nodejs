@@ -185,6 +185,46 @@ describe('maxipago.gateway', function() {
         );
       });
     });
+
+    it('success response using Token', function(done) {
+      var client = index.basicClient();
+      mpGateway.saveClient(client, function(err, mp_err, data) {
+        var cId = data.result.customerId,
+            sale = index.basicSale(cId, true);
+
+        mpGateway.pay(
+          sale,
+          function(err, mp_err, data) {
+            var token = data['save-on-file'].token,
+                sale = index.saleUsingToken(cId, token);
+
+            mpGateway.pay(
+              sale,
+              function(err, mp_err, data) {
+                assert.ok(!err);
+                assert.ok(!mp_err);
+
+                assert.equal(data.authCode, '123456');
+                assert.equal(data.referenceNum, sale.referenceNum);
+                assert.equal(data.errorMessage, '');
+                assert.equal(data.responseCode, '0');
+                assert.equal(data.responseMessage, 'CAPTURED');
+                assert.equal(data.avsResponseCode, 'YYY');
+                assert.equal(data.cvvResponseCode, 'M');
+                assert.equal(data.processorCode, 'A');
+                assert.equal(data.processorMessage, 'APPROVED');
+
+                assert.ok(data.hasOwnProperty('orderID'));
+                assert.ok(data.hasOwnProperty('transactionID'));
+                assert.ok(data.hasOwnProperty('transactionTimestamp'));
+
+                done();
+              }
+            );
+          }
+        );
+      });
+    });
   });
 
   describe('#saveClient', function() {
