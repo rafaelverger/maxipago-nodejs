@@ -54,7 +54,7 @@ var _buildGateway = function() {
         }
       };
     },
-    _saleUsingToken = function(customerId, token) {
+    _saleWithToken = function(customerId, token) {
       var now = new Date().getTime();
       return {
         processorID: '1',
@@ -94,6 +94,6 @@ exports.buildGateway = _buildGateway;
 exports.basicClient = _basicClient;
 exports.fullClient = _fullClient;
 exports.basicSale = _basicSale;
-exports.saleUsingToken = _saleUsingToken;
+exports.saleWithToken = _saleWithToken;
 exports.basicAddCard = _basicAddCard;
 exports.basicDeleteCard = _basicDeleteCard;

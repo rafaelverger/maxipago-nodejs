@@ -196,7 +196,7 @@ describe('maxipago.gateway', function() {
           sale,
           function(err, mp_err, data) {
             var token = data['save-on-file'].token,
-                sale = index.saleUsingToken(cId, token);
+                sale = index.saleWithToken(cId, token);
 
             mpGateway.sale(
               sale,
