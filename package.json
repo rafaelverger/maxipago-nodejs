@@ -1,12 +1,19 @@
 {
   "name": "maxipago",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "A NodeJS lib for MaxiPago Gateway",
-  "author": {
-    "name": "Rafael Verger",
-    "email": "rafael@rafaelverger.com.br",
-    "url": "https://plus.google.com/u/1/+RafaelVerger"
-  },
+  "contributors": [
+    {
+      "name": "Rafael Verger",
+      "email": "rafael@rafaelverger.com.br",
+      "url": "https://github.com/rafaelverger"
+    },
+    {
+      "name": "Anderson de Oliveira",
+      "email": "andersonba@me.com",
+      "url": "https://github.com/andersonba"
+    }
+  ],
   "homepage": "https://github.com/rafaelverger/maxipago",
   "repository": {
     "type": "git",
