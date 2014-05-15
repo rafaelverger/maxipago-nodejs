@@ -1,6 +1,6 @@
 {
   "name": "maxipago",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "A NodeJS lib for MaxiPago Gateway",
   "contributors": [
     {

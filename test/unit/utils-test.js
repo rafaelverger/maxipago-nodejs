@@ -66,7 +66,6 @@ describe('utils', function() {
       fn_formatObject = sandbox.stub(mp_utils, 'formatObject');
       fn_formatObject.returns(formattedObj);
     });
-
     afterEach(function() {
       fn_buildObj.reset();
       xml2js.Builder.reset();
@@ -127,14 +126,39 @@ describe('utils', function() {
     });
 
     it('buildAddCardXML', function() {
-      var data = {'data': 'data'},
+      var data = {'expirationMonth': 12},
+          fixedData = {'expirationMonth': '12'},
           auth = {'auth': 'auth'},
           xmlOpts = {'opt': 'opt'};
 
       mp_utils.buildAddCardXML(data, auth, xmlOpts);
 
       assert.ok(fn_formatObject.calledOnce);
-      assert.ok(fn_formatObject.calledWithExactly(data, models.addCard));
+      assert.ok(fn_formatObject.calledWithExactly(fixedData, models.addCard));
+
+      assert.ok(xml2js.Builder.calledOnce);
+      assert.ok(xml2js.Builder.calledWithExactly(xmlOpts));
+
+      assert.ok(fn_buildObj.calledOnce);
+      assert.ok(fn_buildObj.calledWithExactly({
+        'api-request': {
+          verification: auth,
+          command: 'add-card-onfile',
+          request: formattedObj
+        }
+      }));
+    });
+
+    it('buildAddCardXML with month < 10', function() {
+      var data = {'expirationMonth': 1},
+          fixedData = {'expirationMonth': '01'},
+          auth = {'auth': 'auth'},
+          xmlOpts = {'opt': 'opt'};
+
+      mp_utils.buildAddCardXML(data, auth, xmlOpts);
+
+      assert.ok(fn_formatObject.calledOnce);
+      assert.ok(fn_formatObject.calledWithExactly(fixedData, models.addCard));
 
       assert.ok(xml2js.Builder.calledOnce);
       assert.ok(xml2js.Builder.calledWithExactly(xmlOpts));
