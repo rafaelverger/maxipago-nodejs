@@ -296,4 +296,66 @@ describe('maxipago.gateway', function() {
       );
     });
   });
+
+  describe('#updateCustomer', function() {
+    it('basic data', function(done) {
+      var client = index.basicClient();
+      mpGateway.addCustomer(
+        client,
+        function(err, mp_err, data) {
+          var cId = data.result.customerId;
+
+          client.customerId = cId;
+          client.firstName += ' updated';
+          client.lastName += ' updated';
+          mpGateway.updateCustomer(client, function(err, mp_err, data) {
+            assert.ok(!err);
+            assert.ok(!mp_err);
+
+            assert.equal(data.errorCode, '0');
+            assert.equal(data.errorMessage, '');
+            assert.equal(data.command, 'update-consumer');
+
+            assert.ok(data.hasOwnProperty('result'));
+            assert.equal(data.result, '');
+
+            done();
+          });
+        }
+      );
+    });
+
+    it('wrong order', function(done) {
+      var client = index.fullClient(),
+          unordered_client = {};
+
+      Object.keys(client).reverse().forEach(function(key) {
+        unordered_client[key] = client[key];
+      });
+
+      mpGateway.addCustomer(
+        client,
+        function(err, mp_err, data) {
+          var cId = data.result.customerId;
+
+          unordered_client.customerId = cId;
+          unordered_client.firstName += ' updated';
+          unordered_client.lastName += ' updated';
+          mpGateway.updateCustomer(unordered_client, function(err, mp_err, data) {
+            assert.ok(!err);
+            assert.ok(!mp_err);
+
+            assert.equal(data.errorCode, '0');
+            assert.equal(data.errorMessage, '');
+            assert.equal(data.command, 'update-consumer');
+
+            assert.ok(data.hasOwnProperty('result'));
+            assert.equal(data.result, '');
+
+            done();
+          });
+        }
+      );
+    });
+  });
 });

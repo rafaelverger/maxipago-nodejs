@@ -99,6 +99,29 @@ describe('utils', function() {
       }));
     });
 
+    it('buildUpdateCustomerXML', function() {
+      var data = {'data': 'data'},
+          auth = {'auth': 'auth'},
+          xmlOpts = {'opt': 'opt'};
+
+      mp_utils.buildUpdateCustomerXML(data, auth, xmlOpts);
+
+      assert.ok(fn_formatObject.calledOnce);
+      assert.ok(fn_formatObject.calledWithExactly(data, models.updateCustomer));
+
+      assert.ok(xml2js.Builder.calledOnce);
+      assert.ok(xml2js.Builder.calledWithExactly(xmlOpts));
+
+      assert.ok(fn_buildObj.calledOnce);
+      assert.ok(fn_buildObj.calledWithExactly({
+        'api-request': {
+          verification: auth,
+          command: 'update-consumer',
+          request: formattedObj
+        }
+      }));
+    });
+
     it('buildSaleXML', function() {
       var data = {'data': 'data'},
           version = {'version': 'version'},
