@@ -1,9 +1,9 @@
 var assert = require('assert'),
-    index = require('./index');
+  index = require('./index');
 
 describe('maxipago.gateway', function() {
   var start, count, itTimeout = 30000,
-      mpGateway = null;
+    mpGateway = null;
 
   this.timeout(itTimeout);
 
@@ -31,7 +31,7 @@ describe('maxipago.gateway', function() {
       var client = index.basicClient();
       mpGateway.addCustomer(client, function(err, mp_err, data) {
         var cId = data.result.customerId,
-            card = index.basicAddCard(cId);
+          card = index.basicAddCard(cId);
 
         mpGateway.addCard(
           card,
@@ -56,7 +56,7 @@ describe('maxipago.gateway', function() {
       var client = index.basicClient();
       mpGateway.addCustomer(client, function(err, mp_err, data) {
         var cId = data.result.customerId,
-            card = index.basicAddCard(cId);
+          card = index.basicAddCard(cId);
 
         mpGateway.addCard(
           card,
@@ -85,13 +85,13 @@ describe('maxipago.gateway', function() {
       var client = index.basicClient();
       mpGateway.addCustomer(client, function(err, mp_err, data) {
         var cId = data.result.customerId,
-            card = index.basicAddCard(cId);
+          card = index.basicAddCard(cId);
 
         mpGateway.addCard(
           card,
           function(err, mp_err, data) {
             var token = data.result.token,
-                card = index.basicDeleteCard(cId, token);
+              card = index.basicDeleteCard(cId, token);
 
             mpGateway.deleteCard(
               card,
@@ -117,7 +117,7 @@ describe('maxipago.gateway', function() {
       var client = index.basicClient();
       mpGateway.addCustomer(client, function(err, mp_err, data) {
         var cId = data.result.customerId,
-            sale = index.basicSale(cId, true);
+          sale = index.basicSale(cId, true);
 
         mpGateway.sale(
           sale,
@@ -152,7 +152,7 @@ describe('maxipago.gateway', function() {
       var client = index.basicClient();
       mpGateway.addCustomer(client, function(err, mp_err, data) {
         var cId = data.result.customerId,
-            sale = index.basicSale(cId, false);
+          sale = index.basicSale(cId, false);
 
         mpGateway.sale(
           sale,
@@ -190,13 +190,13 @@ describe('maxipago.gateway', function() {
       var client = index.basicClient();
       mpGateway.addCustomer(client, function(err, mp_err, data) {
         var cId = data.result.customerId,
-            sale = index.basicSale(cId, true);
+          sale = index.basicSale(cId, true);
 
         mpGateway.sale(
           sale,
           function(err, mp_err, data) {
             var token = data['save-on-file'].token,
-                sale = index.saleWithToken(cId, token);
+              sale = index.saleWithToken(cId, token);
 
             mpGateway.sale(
               sale,
@@ -272,7 +272,7 @@ describe('maxipago.gateway', function() {
 
     it('wrong order', function(done) {
       var client = index.fullClient(),
-          unordered_client = {};
+        unordered_client = {};
 
       Object.keys(client).reverse().forEach(function(key) {
         unordered_client[key] = client[key];
@@ -327,7 +327,7 @@ describe('maxipago.gateway', function() {
 
     it('wrong order', function(done) {
       var client = index.fullClient(),
-          unordered_client = {};
+        unordered_client = {};
 
       Object.keys(client).reverse().forEach(function(key) {
         unordered_client[key] = client[key];

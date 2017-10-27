@@ -1,5 +1,5 @@
 var Mocha = require('mocha'),
-    exec = require('child_process').exec;
+  exec = require('child_process').exec;
 
 process.chdir(__dirname);
 exec('find . -name "*test.js"', function(err, stdout, stderr) {
