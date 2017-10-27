@@ -78,7 +78,7 @@ describe('maxipago.gateway', function() {
       });
     });
   });
-  
+
   describe('#deleteCard', function() {
     it('delete existing card', function(done) {
 

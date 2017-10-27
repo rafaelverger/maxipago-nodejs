@@ -30,12 +30,12 @@
     "test": "node test/all.js"
   },
   "dependencies": {
-    "restify": ">= 2.6.3",
-    "xml2js": ">= 0.4.1"
+    "restify-clients": "^1.5.2",
+    "xml2js": ">=0.4.19"
   },
   "devDependencies": {
-    "mocha": "1.18.2",
-    "sinon": "1.9.0",
-    "proxyquire": "0.5.3"
+    "mocha": "4.0.1",
+    "sinon": "4.0.2",
+    "proxyquire": "1.8.0"
   }
 }

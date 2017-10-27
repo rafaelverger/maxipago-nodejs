@@ -105,7 +105,6 @@ describe('utils', function() {
           xmlOpts = {'opt': 'opt'};
 
       mp_utils.buildUpdateCustomerXML(data, auth, xmlOpts);
-
       assert.ok(fn_formatObject.calledOnce);
       assert.ok(fn_formatObject.calledWithExactly(data, models.updateCustomer));
 
