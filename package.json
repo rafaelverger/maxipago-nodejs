@@ -1,7 +1,8 @@
 {
   "name": "maxipago",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "description": "A NodeJS lib for MaxiPago Gateway",
+  "license": "MIT",
   "contributors": [
     {
       "name": "Rafael Verger",
