@@ -1,4 +1,5 @@
-box: wercker/nodejs
+box: node:8
+
 build:
     steps:
         - npm-install
