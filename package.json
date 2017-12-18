@@ -1,7 +1,8 @@
 {
   "name": "maxipago",
-  "version": "0.5.3",
+  "version": "0.6.0",
   "description": "A NodeJS lib for MaxiPago Gateway",
+  "license": "MIT",
   "contributors": [
     {
       "name": "Rafael Verger",
@@ -12,6 +13,11 @@
       "name": "Anderson de Oliveira",
       "email": "andersonba@me.com",
       "url": "https://github.com/andersonba"
+    },
+    {
+      "name": "Felipe Plets",
+      "email": "felipe@plets.me",
+      "url": "https://github.com/felipeplets"
     }
   ],
   "homepage": "https://github.com/rafaelverger/maxipago-nodejs",
@@ -35,7 +41,7 @@
   },
   "devDependencies": {
     "mocha": "4.0.1",
-    "sinon": "4.1.2",
+    "sinon": "4.1.3",
     "proxyquire": "1.8.0"
   }
 }
