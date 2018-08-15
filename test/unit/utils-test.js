@@ -72,8 +72,20 @@ describe('utils', function() {
     });
     afterEach(function() {
       fn_buildObj.reset();
-      xml2js.Builder.reset();
-      fn_formatObject.reset();
+      xml2js = {
+        Builder: sandbox.spy(function() {
+          return {
+            buildObject: fn_buildObj
+          };
+        })
+      };
+      mp_utils = proxyquire('../../lib/utils', {
+        'xml2js': xml2js
+      });
+
+      formattedObj = 'formattedObj';
+      fn_formatObject = sandbox.stub(mp_utils, 'formatObject');
+      fn_formatObject.returns(formattedObj);
     });
 
     after(function() {
