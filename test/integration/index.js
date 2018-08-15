@@ -1,5 +1,6 @@
+require('dotenv').config({path: '../.env'})
 var maxipago = require('../../lib/maxipago'),
-  testMerchantId = 100,
+  testMerchantId = process.env.MP_TEST_ID,
   testMerchantKey = process.env.MP_TEST_KEY;
 
 var _buildGateway = function() {
