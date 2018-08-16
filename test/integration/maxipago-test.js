@@ -360,6 +360,26 @@ describe('maxipago.gateway', function() {
   });
 
   describe('#recurringPayments', function() {
+    it('create recurringPayment', function(done) {
+      var recurring = index.basicRecurringPayment();
+      mpGateway.recurringPayment(
+        recurring,
+        function (err, mp_err, data) {
+          assert.ok(!err);
+          assert.ok(!mp_err);
+
+          assert.ok(data.hasOwnProperty('orderID'));
+          assert.ok(data.hasOwnProperty('transactionID'));
+          assert.ok(data.hasOwnProperty('transactionTimestamp'));
+
+          assert.equal(data.responseMessage, 'APPROVED');
+          assert.equal(data.processorName, 'SIMULATOR');
+
+          done();
+        }
+      );
+    });
+
     it('create recurringPayment using Token', function(done) {
       var client = index.basicClient();
 

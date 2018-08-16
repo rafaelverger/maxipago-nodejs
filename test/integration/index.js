@@ -89,6 +89,58 @@ var _buildGateway = function() {
       token: token
     };
   },
+  _basicRecurringPayment = function() {
+    var now = new Date().getTime();  
+    var tomorrow = new Date().getFullYear() + '-0' + (new Date().getMonth() +1) + '-' + (new Date().getDate() + 1) ;
+    return {
+      processorID: '1',
+      referenceNum: 'PONumber-' + now,
+      billing: {
+        name: 'Fulano De Tal',
+        address: 'Rua Desconhecida, s/n',
+        address2: 'Casa 0',
+        city: 'Desaparecida',
+        state: 'BA',
+        postalcode: '123000-456',
+        country: 'BR',
+        phone: '+5511990090009',
+        email:  'email@server.com'
+      },
+      shipping: {
+        name: 'Fulano De Tal',
+        address: 'Rua Desconhecida, s/n',
+        address2: 'Casa 0',
+        city: 'Desaparecida',
+        state: 'BA',
+        postalcode: '123000-456',
+        country: 'BR',
+        phone: '+5511990090009',
+        email:  'email@server.com'
+      },
+      transactionDetail: {
+        payType: {
+          creditCard: {
+            number: '4111111111111111',
+            expMonth: '12',
+            expYear: '2020',
+            cvvNumber: '999'
+          }
+        }
+      },
+      payment: {
+        currencyCode: 'BRL',
+        chargeTotal: '11.00'
+      },
+      recurring: {
+        action: 'new',
+        startDate: tomorrow,
+        frequency: '1',
+        period: 'monthly',
+        installments: '10',
+        failureThreshold: '5',
+      }
+    };
+  },
   _basicRecurringPaymentWithToken = function(customerId, token) {
     var now = new Date().getTime();  
     var tomorrow = new Date().getFullYear() + '-0' + (new Date().getMonth() +1) + '-' + (new Date().getDate() + 1) ;
@@ -191,6 +243,7 @@ exports.basicSale = _basicSale;
 exports.saleWithToken = _saleWithToken;
 exports.basicAddCard = _basicAddCard;
 exports.basicDeleteCard = _basicDeleteCard;
+exports.basicRecurringPayment = _basicRecurringPayment;
 exports.basicRecurringPaymentWithToken = _basicRecurringPaymentWithToken;
 exports.basicUpdateRecurringPayment = _basicUpdateRecurringPayment;
 exports.basicCancelRecurringPayment = _basicCancelRecurringPayment;
