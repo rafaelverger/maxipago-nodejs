@@ -98,6 +98,11 @@ var _buildGateway = function() {
       }
     };
   },
+  _basicVoid = function(transactionID) {
+    return {
+      transactionID: transactionID,
+    };
+  },
   _basicSale = function(customerId, forValidSale) {
     var now = new Date().getTime();
     return {
@@ -299,6 +304,7 @@ exports.basicDeleteCard = _basicDeleteCard;
 exports.basicAuth = _basicAuth;
 exports.basicAuthWithToken = _basicAuthWithToken;
 exports.basicCapture = _basicCapture;
+exports.basicVoid = _basicVoid;
 exports.basicSale = _basicSale;
 exports.basicSaleWithToken = _basicSaleWithToken;
 exports.basicRecurringPayment = _basicRecurringPayment;

@@ -94,7 +94,6 @@ describe('maxipago.gateway', function() {
       );
     });
   });
-
   describe('#updateCustomer', function() {
     it('update customer data', function(done) {
       var client = index.basicClient();
@@ -210,7 +209,6 @@ describe('maxipago.gateway', function() {
       });
     });
   });
-
   describe('#deleteCard', function() {
     it('delete existing card', function(done) {
 
@@ -318,7 +316,6 @@ describe('maxipago.gateway', function() {
       });
     });
   });
-
   describe('#capture', function() {
     it('capture an auth', function(done) {
       var client = index.basicClient();
@@ -348,6 +345,51 @@ describe('maxipago.gateway', function() {
                 assert.ok(data.hasOwnProperty('orderID'));
       
                 done();
+              }
+            );
+
+          }
+        );
+      });
+    });
+  });
+  describe('#void', function() {
+    it('void an capture', function(done) {
+      var client = index.basicClient();
+      mpGateway.addCustomer(client, function (err, mp_err, data) {
+        var cId = data.result.customerId,
+          auth = index.basicAuth(cId);
+  
+        mpGateway.auth(
+          auth,
+          function (err, mp_err, data) {
+            var orderID =  data.orderID,
+            referenceNum = data.referenceNum,
+            capture = index.basicCapture(orderID, referenceNum);
+
+            mpGateway.capture(
+              capture,
+              function (err, mp_err, data) {
+                var transactionID = data.transactionID,
+                 _void = index.basicVoid(transactionID);
+               
+                 mpGateway.void(
+                  _void,
+                  function (err, mp_err, data) {
+                    assert.ok(!err);
+                    assert.ok(!mp_err);
+    
+                    assert.equal(data.errorMessage, '');
+                    assert.equal(data.responseCode, '0');
+                    assert.equal(data.transactionID, transactionID);
+          
+                    assert.equal(data.responseMessage, 'VOIDED');
+                    assert.equal(data.processorMessage, 'APPROVED');
+                    
+                    done();
+                  }
+                );
+
               }
             );
 
