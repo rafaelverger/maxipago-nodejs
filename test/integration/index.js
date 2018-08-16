@@ -28,6 +28,76 @@ var _buildGateway = function() {
     client.sex = 'M';
     return client;
   },
+  _basicAddCard = function(customerId) {
+    return {
+      customerId: customerId,
+      creditCardNumber: '4111111111111111',
+      expirationMonth: 12,
+      expirationYear: 2020,
+      billingName: 'Test Credit Card'
+    };
+  },
+  _basicDeleteCard = function(customerId, token) {
+    return {
+      customerId: customerId,
+      token: token
+    };
+  },
+  _basicAuth = function(customerId) {
+    var now = new Date().getTime();
+    return {
+      processorID: '1',
+      referenceNum: 'PONumber-' + now,
+      billing: {
+        name: 'Test Credit Card'
+      },
+      transactionDetail: {
+        payType: {
+          creditCard: {
+            number: '4111111111111111',
+            expMonth: '12',
+            expYear: '2020',
+            cvvNumber: '999'
+          }
+        }
+      },
+      payment: {
+        currencyCode: 'BRL',
+        chargeTotal: '10.00'
+      },
+      saveOnFile: {
+        customerToken: customerId
+      }
+    };
+  },
+  _basicAuthWithToken = function(customerId, token) {
+    var now = new Date().getTime();
+    return {
+      processorID: '1',
+      referenceNum: 'PONumber-' + now,
+      transactionDetail: {
+        payType: {
+          onFile: {
+            customerId: customerId,
+            token: token
+          }
+        }
+      },
+      payment: {
+        currencyCode: 'BRL',
+        chargeTotal: '10.00'
+      }
+    };
+  },
+  _basicCapture = function(orderId, referenceNum) {
+    return {
+      orderID: orderId,
+      referenceNum: referenceNum, 
+       payment: {
+        chargeTotal: '10.00'
+      }
+    };
+  },
   _basicSale = function(customerId, forValidSale) {
     var now = new Date().getTime();
     return {
@@ -55,7 +125,7 @@ var _buildGateway = function() {
       }
     };
   },
-  _saleWithToken = function(customerId, token) {
+  _basicSaleWithToken = function(customerId, token) {
     var now = new Date().getTime();
     return {
       processorID: '1',
@@ -72,21 +142,6 @@ var _buildGateway = function() {
         currencyCode: 'BRL',
         chargeTotal: '10.00'
       }
-    };
-  },
-  _basicAddCard = function(customerId) {
-    return {
-      customerId: customerId,
-      creditCardNumber: '4111111111111111',
-      expirationMonth: 12,
-      expirationYear: 2020,
-      billingName: 'Test Credit Card'
-    };
-  },
-  _basicDeleteCard = function(customerId, token) {
-    return {
-      customerId: customerId,
-      token: token
     };
   },
   _basicRecurringPayment = function() {
@@ -239,10 +294,13 @@ var _buildGateway = function() {
 exports.buildGateway = _buildGateway;
 exports.basicClient = _basicClient;
 exports.fullClient = _fullClient;
-exports.basicSale = _basicSale;
-exports.saleWithToken = _saleWithToken;
 exports.basicAddCard = _basicAddCard;
 exports.basicDeleteCard = _basicDeleteCard;
+exports.basicAuth = _basicAuth;
+exports.basicAuthWithToken = _basicAuthWithToken;
+exports.basicCapture = _basicCapture;
+exports.basicSale = _basicSale;
+exports.basicSaleWithToken = _basicSaleWithToken;
 exports.basicRecurringPayment = _basicRecurringPayment;
 exports.basicRecurringPaymentWithToken = _basicRecurringPaymentWithToken;
 exports.basicUpdateRecurringPayment = _basicUpdateRecurringPayment;
