@@ -26,7 +26,7 @@ describe('maxipago.gateway', function() {
   });
 
   describe('#addCustomer', function() {
-    it('add basic data', function(done) {
+    it('add customer basic data', function(done) {
       var client = index.basicClient();
 
       mpGateway.addCustomer(
@@ -47,7 +47,7 @@ describe('maxipago.gateway', function() {
       );
     });
 
-    it('add full data', function(done) {
+    it('add customer full data', function(done) {
       var client = index.fullClient();
 
       mpGateway.addCustomer(
@@ -68,7 +68,7 @@ describe('maxipago.gateway', function() {
       );
     });
 
-    it('add with wrong order request', function(done) {
+    it('add customer full data with unordered request', function(done) {
       var client = index.fullClient(),
         unordered_client = {};
 
@@ -96,7 +96,7 @@ describe('maxipago.gateway', function() {
   });
 
   describe('#updateCustomer', function() {
-    it('update basic data', function(done) {
+    it('update customer data', function(done) {
       var client = index.basicClient();
       mpGateway.addCustomer(
         client,
@@ -123,7 +123,7 @@ describe('maxipago.gateway', function() {
       );
     });
 
-    it('update with wrong order request', function(done) {
+    it('update customer data with unordered request', function(done) {
       var client = index.fullClient(),
         unordered_client = {};
 
@@ -245,7 +245,7 @@ describe('maxipago.gateway', function() {
   });
 
   describe('#auth', function() {
-    it('create auth', function(done) {
+    it('add auth', function(done) {
       var client = index.basicClient();
       mpGateway.addCustomer(client, function (err, mp_err, data) {
         var cId = data.result.customerId,
@@ -277,7 +277,7 @@ describe('maxipago.gateway', function() {
       });
     });
   
-    it('create auth using Token', function(done) {
+    it('add auth using token', function(done) {
       var client = index.basicClient();
    
       mpGateway.addCustomer(client, function (err, mp_err, data) {
@@ -320,7 +320,7 @@ describe('maxipago.gateway', function() {
   });
 
   describe('#capture', function() {
-    it('make capture', function(done) {
+    it('capture an auth', function(done) {
       var client = index.basicClient();
       mpGateway.addCustomer(client, function (err, mp_err, data) {
         var cId = data.result.customerId,
@@ -358,7 +358,7 @@ describe('maxipago.gateway', function() {
   });
   
   describe('#sale', function() {
-    it('create sale', function(done) {
+    it('add fresh sale', function(done) {
       var client = index.basicClient();
       mpGateway.addCustomer(client, function(err, mp_err, data) {
         var cId = data.result.customerId,
@@ -393,7 +393,7 @@ describe('maxipago.gateway', function() {
       });
     });
 
-    it('create sale with failed response', function(done) {
+    it('add fresh sale with failed response', function(done) {
       var client = index.basicClient();
       mpGateway.addCustomer(client, function(err, mp_err, data) {
         var cId = data.result.customerId,
@@ -431,7 +431,7 @@ describe('maxipago.gateway', function() {
       });
     });
 
-    it('create sale using Token', function(done) {
+    it('add fresh sale using token', function(done) {
       var client = index.basicClient();
       mpGateway.addCustomer(client, function(err, mp_err, data) {
         var cId = data.result.customerId,
@@ -474,7 +474,7 @@ describe('maxipago.gateway', function() {
   });
 
   describe('#recurringPayments', function() {
-    it('create recurringPayment', function(done) {
+    it('add recurring payment', function(done) {
       var recurring = index.basicRecurringPayment();
       mpGateway.recurringPayment(
         recurring,
@@ -494,7 +494,7 @@ describe('maxipago.gateway', function() {
       );
     });
 
-    it('create recurringPayment using Token', function(done) {
+    it('add recurring payment using token', function(done) {
       var client = index.basicClient();
 
       mpGateway.addCustomer(client, function (err, mp_err, data) {
@@ -528,7 +528,7 @@ describe('maxipago.gateway', function() {
       });
     });
 
-    it('update recurringPayment', function(done) {
+    it('update recurring payment', function(done) {
       var client = index.basicClient();
 
       mpGateway.addCustomer(client, function (err, mp_err, data) {
@@ -567,7 +567,7 @@ describe('maxipago.gateway', function() {
       });
     });
 
-    it('cancel recurringPayment', function(done) {
+    it('cancel recurring payment', function(done) {
       var client = index.basicClient();
 
       mpGateway.addCustomer(client, function (err, mp_err, data) {

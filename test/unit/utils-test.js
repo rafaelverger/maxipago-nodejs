@@ -92,6 +92,7 @@ describe('utils', function() {
       sandbox.restore();
     });
 
+
     it('buildAddCustomerXML', function() {
       var data = {
           'data': 'data'
@@ -149,39 +150,6 @@ describe('utils', function() {
       }));
     });
 
-    it('buildSaleXML', function() {
-      var data = {
-          'data': 'data'
-        },
-        version = {
-          'version': 'version'
-        },
-        auth = {
-          'auth': 'auth'
-        },
-        xmlOpts = {
-          'opt': 'opt'
-        };
-
-      mp_utils.buildSaleXML(data, version, auth, xmlOpts);
-
-      assert.ok(fn_formatObject.calledOnce);
-      assert.ok(fn_formatObject.calledWithExactly(data, models.sale));
-
-      assert.ok(xml2js.Builder.calledOnce);
-      assert.ok(xml2js.Builder.calledWithExactly(xmlOpts));
-
-      assert.ok(fn_buildObj.calledOnce);
-      assert.ok(fn_buildObj.calledWithExactly({
-        'transaction-request': {
-          version: version,
-          verification: auth,
-          order: {
-            sale: formattedObj
-          }
-        }
-      }));
-    });
 
     it('buildAddCardXML', function() {
       var data = {
@@ -214,7 +182,7 @@ describe('utils', function() {
         }
       }));
     });
-
+    
     it('buildAddCardXML with month < 10', function() {
       var data = {
           'expirationMonth': 1
@@ -275,6 +243,110 @@ describe('utils', function() {
         }
       }));
     });
+
+    
+    it('buildAuthXML', function() {
+      var data = {
+          'data': 'data'
+        },
+        version = {
+          'version': 'version'
+        },
+        auth = {
+          'auth': 'auth'
+        },
+        xmlOpts = {
+          'opt': 'opt'
+        };
+
+      mp_utils.buildAuthXML(data, version, auth, xmlOpts);
+
+      assert.ok(fn_formatObject.calledOnce);
+      assert.ok(fn_formatObject.calledWithExactly(data, models.sale));
+
+      assert.ok(xml2js.Builder.calledOnce);
+      assert.ok(xml2js.Builder.calledWithExactly(xmlOpts));
+
+      assert.ok(fn_buildObj.calledOnce);
+      assert.ok(fn_buildObj.calledWithExactly({
+        'transaction-request': {
+          version: version,
+          verification: auth,
+          order: {
+            auth: formattedObj
+          }
+        }
+      }));
+    });
+
+    it('buildCaptureXML', function() {
+      var data = {
+          'data': 'data'
+        },
+        version = {
+          'version': 'version'
+        },
+        auth = {
+          'auth': 'auth'
+        },
+        xmlOpts = {
+          'opt': 'opt'
+        };
+
+      mp_utils.buildCaptureXML(data, version, auth, xmlOpts);
+
+      assert.ok(fn_formatObject.calledOnce);
+      assert.ok(fn_formatObject.calledWithExactly(data, models.capture));
+
+      assert.ok(xml2js.Builder.calledOnce);
+      assert.ok(xml2js.Builder.calledWithExactly(xmlOpts));
+
+      assert.ok(fn_buildObj.calledOnce);
+      assert.ok(fn_buildObj.calledWithExactly({
+        'transaction-request': {
+          version: version,
+          verification: auth,
+          order: {
+            capture: formattedObj
+          }
+        }
+      }));
+    });
+
+    it('buildSaleXML', function() {
+      var data = {
+          'data': 'data'
+        },
+        version = {
+          'version': 'version'
+        },
+        auth = {
+          'auth': 'auth'
+        },
+        xmlOpts = {
+          'opt': 'opt'
+        };
+
+      mp_utils.buildSaleXML(data, version, auth, xmlOpts);
+
+      assert.ok(fn_formatObject.calledOnce);
+      assert.ok(fn_formatObject.calledWithExactly(data, models.sale));
+
+      assert.ok(xml2js.Builder.calledOnce);
+      assert.ok(xml2js.Builder.calledWithExactly(xmlOpts));
+
+      assert.ok(fn_buildObj.calledOnce);
+      assert.ok(fn_buildObj.calledWithExactly({
+        'transaction-request': {
+          version: version,
+          verification: auth,
+          order: {
+            sale: formattedObj
+          }
+        }
+      }));
+    });
+
 
     it('buildRecurringPaymentXML', function() {
       var data = {
