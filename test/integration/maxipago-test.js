@@ -25,6 +25,138 @@ describe('maxipago.gateway', function() {
     }
   });
 
+  describe('#addCustomer', function() {
+    it('add basic data', function(done) {
+      var client = index.basicClient();
+
+      mpGateway.addCustomer(
+        client,
+        function(err, mp_err, data) {
+          assert.ok(!err);
+          assert.ok(!mp_err);
+
+          assert.equal(data.errorCode, '0');
+          assert.equal(data.errorMessage, '');
+          assert.equal(data.command, 'add-consumer');
+
+          assert.ok(data.hasOwnProperty('result'));
+          assert.ok(data.result.hasOwnProperty('customerId'));
+
+          done();
+        }
+      );
+    });
+
+    it('add full data', function(done) {
+      var client = index.fullClient();
+
+      mpGateway.addCustomer(
+        client,
+        function(err, mp_err, data) {
+          assert.ok(!err);
+          assert.ok(!mp_err);
+
+          assert.equal(data.errorCode, '0');
+          assert.equal(data.errorMessage, '');
+          assert.equal(data.command, 'add-consumer');
+
+          assert.ok(data.hasOwnProperty('result'));
+          assert.ok(data.result.hasOwnProperty('customerId'));
+
+          done();
+        }
+      );
+    });
+
+    it('add with wrong order request', function(done) {
+      var client = index.fullClient(),
+        unordered_client = {};
+
+      Object.keys(client).reverse().forEach(function(key) {
+        unordered_client[key] = client[key];
+      });
+
+      mpGateway.addCustomer(
+        unordered_client,
+        function(err, mp_err, data) {
+          assert.ok(!err);
+          assert.ok(!mp_err);
+
+          assert.equal(data.errorCode, '0');
+          assert.equal(data.errorMessage, '');
+          assert.equal(data.command, 'add-consumer');
+
+          assert.ok(data.hasOwnProperty('result'));
+          assert.ok(data.result.hasOwnProperty('customerId'));
+
+          done();
+        }
+      );
+    });
+  });
+
+  describe('#updateCustomer', function() {
+    it('update basic data', function(done) {
+      var client = index.basicClient();
+      mpGateway.addCustomer(
+        client,
+        function(err, mp_err, data) {
+          var cId = data.result.customerId;
+
+          client.customerId = cId;
+          client.firstName += ' updated';
+          client.lastName += ' updated';
+          mpGateway.updateCustomer(client, function(err, mp_err, data) {
+            assert.ok(!err);
+            assert.ok(!mp_err);
+
+            assert.equal(data.errorCode, '0');
+            assert.equal(data.errorMessage, '');
+            assert.equal(data.command, 'update-consumer');
+
+            assert.ok(data.hasOwnProperty('result'));
+            assert.equal(data.result, '');
+
+            done();
+          });
+        }
+      );
+    });
+
+    it('update with wrong order request', function(done) {
+      var client = index.fullClient(),
+        unordered_client = {};
+
+      Object.keys(client).reverse().forEach(function(key) {
+        unordered_client[key] = client[key];
+      });
+
+      mpGateway.addCustomer(
+        client,
+        function(err, mp_err, data) {
+          var cId = data.result.customerId;
+
+          unordered_client.customerId = cId;
+          unordered_client.firstName += ' updated';
+          unordered_client.lastName += ' updated';
+          mpGateway.updateCustomer(unordered_client, function(err, mp_err, data) {
+            assert.ok(!err);
+            assert.ok(!mp_err);
+
+            assert.equal(data.errorCode, '0');
+            assert.equal(data.errorMessage, '');
+            assert.equal(data.command, 'update-consumer');
+
+            assert.ok(data.hasOwnProperty('result'));
+            assert.equal(data.result, '');
+
+            done();
+          });
+        }
+      );
+    });
+  });
+
   describe('#addCard', function() {
 
     it('add new card', function(done) {
@@ -113,7 +245,7 @@ describe('maxipago.gateway', function() {
   });
 
   describe('#sale', function() {
-    it('success response', function(done) {
+    it('create sale', function(done) {
       var client = index.basicClient();
       mpGateway.addCustomer(client, function(err, mp_err, data) {
         var cId = data.result.customerId,
@@ -148,7 +280,7 @@ describe('maxipago.gateway', function() {
       });
     });
 
-    it('failed response', function(done) {
+    it('create sale with failed response', function(done) {
       var client = index.basicClient();
       mpGateway.addCustomer(client, function(err, mp_err, data) {
         var cId = data.result.customerId,
@@ -186,7 +318,7 @@ describe('maxipago.gateway', function() {
       });
     });
 
-    it('success response using Token', function(done) {
+    it('create sale using Token', function(done) {
       var client = index.basicClient();
       mpGateway.addCustomer(client, function(err, mp_err, data) {
         var cId = data.result.customerId,
@@ -224,138 +356,6 @@ describe('maxipago.gateway', function() {
           }
         );
       });
-    });
-  });
-
-  describe('#addCustomer', function() {
-    it('basic data', function(done) {
-      var client = index.basicClient();
-
-      mpGateway.addCustomer(
-        client,
-        function(err, mp_err, data) {
-          assert.ok(!err);
-          assert.ok(!mp_err);
-
-          assert.equal(data.errorCode, '0');
-          assert.equal(data.errorMessage, '');
-          assert.equal(data.command, 'add-consumer');
-
-          assert.ok(data.hasOwnProperty('result'));
-          assert.ok(data.result.hasOwnProperty('customerId'));
-
-          done();
-        }
-      );
-    });
-
-    it('full data', function(done) {
-      var client = index.fullClient();
-
-      mpGateway.addCustomer(
-        client,
-        function(err, mp_err, data) {
-          assert.ok(!err);
-          assert.ok(!mp_err);
-
-          assert.equal(data.errorCode, '0');
-          assert.equal(data.errorMessage, '');
-          assert.equal(data.command, 'add-consumer');
-
-          assert.ok(data.hasOwnProperty('result'));
-          assert.ok(data.result.hasOwnProperty('customerId'));
-
-          done();
-        }
-      );
-    });
-
-    it('wrong order', function(done) {
-      var client = index.fullClient(),
-        unordered_client = {};
-
-      Object.keys(client).reverse().forEach(function(key) {
-        unordered_client[key] = client[key];
-      });
-
-      mpGateway.addCustomer(
-        unordered_client,
-        function(err, mp_err, data) {
-          assert.ok(!err);
-          assert.ok(!mp_err);
-
-          assert.equal(data.errorCode, '0');
-          assert.equal(data.errorMessage, '');
-          assert.equal(data.command, 'add-consumer');
-
-          assert.ok(data.hasOwnProperty('result'));
-          assert.ok(data.result.hasOwnProperty('customerId'));
-
-          done();
-        }
-      );
-    });
-  });
-
-  describe('#updateCustomer', function() {
-    it('basic data', function(done) {
-      var client = index.basicClient();
-      mpGateway.addCustomer(
-        client,
-        function(err, mp_err, data) {
-          var cId = data.result.customerId;
-
-          client.customerId = cId;
-          client.firstName += ' updated';
-          client.lastName += ' updated';
-          mpGateway.updateCustomer(client, function(err, mp_err, data) {
-            assert.ok(!err);
-            assert.ok(!mp_err);
-
-            assert.equal(data.errorCode, '0');
-            assert.equal(data.errorMessage, '');
-            assert.equal(data.command, 'update-consumer');
-
-            assert.ok(data.hasOwnProperty('result'));
-            assert.equal(data.result, '');
-
-            done();
-          });
-        }
-      );
-    });
-
-    it('wrong order', function(done) {
-      var client = index.fullClient(),
-        unordered_client = {};
-
-      Object.keys(client).reverse().forEach(function(key) {
-        unordered_client[key] = client[key];
-      });
-
-      mpGateway.addCustomer(
-        client,
-        function(err, mp_err, data) {
-          var cId = data.result.customerId;
-
-          unordered_client.customerId = cId;
-          unordered_client.firstName += ' updated';
-          unordered_client.lastName += ' updated';
-          mpGateway.updateCustomer(unordered_client, function(err, mp_err, data) {
-            assert.ok(!err);
-            assert.ok(!mp_err);
-
-            assert.equal(data.errorCode, '0');
-            assert.equal(data.errorMessage, '');
-            assert.equal(data.command, 'update-consumer');
-
-            assert.ok(data.hasOwnProperty('result'));
-            assert.equal(data.result, '');
-
-            done();
-          });
-        }
-      );
     });
   });
 
