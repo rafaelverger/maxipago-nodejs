@@ -88,6 +88,100 @@ var _buildGateway = function() {
       customerId: customerId,
       token: token
     };
+  },
+  _basicRecurringPaymentWithToken = function(customerId, token) {
+    var now = new Date().getTime();  
+    var tomorrow = new Date().getFullYear() + '-0' + (new Date().getMonth() +1) + '-' + (new Date().getDate() + 1) ;
+    return {
+      processorID: '1',
+      referenceNum: 'PONumber-' + now,
+      billing: {
+        name: 'Fulano De Tal',
+        address: 'Rua Desconhecida, s/n',
+        address2: 'Casa 0',
+        city: 'Desaparecida',
+        state: 'BA',
+        postalcode: '123000-456',
+        country: 'BR',
+        phone: '+5511990090009',
+        email:  'email@server.com'
+      },
+      shipping: {
+        name: 'Fulano De Tal',
+        address: 'Rua Desconhecida, s/n',
+        address2: 'Casa 0',
+        city: 'Desaparecida',
+        state: 'BA',
+        postalcode: '123000-456',
+        country: 'BR',
+        phone: '+5511990090009',
+        email:  'email@server.com'
+      },
+      transactionDetail: {
+        payType: {
+          onFile: {
+            customerId: customerId,
+            token: token
+          }
+        }
+      },
+      payment: {
+        currencyCode: 'BRL',
+        chargeTotal: '11.00'
+      },
+      recurring: {
+        action: 'new',
+        startDate: tomorrow,
+        frequency: '1',
+        period: 'monthly',
+        installments: '10',
+        failureThreshold: '5',
+      }
+    };
+  },
+  _basicUpdateRecurringPayment = function(orderID) {
+    var tomorrow = new Date().getFullYear() + '-0' + (new Date().getMonth() +1) + '-' + (new Date().getDate() + 7) ;
+    return {
+      orderID: orderID,
+      paymentInfo: {
+        cardInfo: {
+          softDescriptor: 'RECSDNAME'
+        }
+      },
+      recurring: {
+        processorID: '1',
+        action: 'disable',
+        installments: '11',
+        nextFireDate: tomorrow,
+        fireDay: '20',
+        period: 'quarterly',
+      },
+      billingInfo: {
+        name: 'Fulano De Tal',
+        address1: 'Rua Desconhecida, s/n',
+        address2: 'Casa 0',
+        city: 'Desaparecida',
+        zip: '123000456',
+        country: 'BR',
+        email:  'email@server.com',
+        phone: '+5511990090009'
+      },
+      shippingInfo: {
+        name: 'Fulano De Tal',
+        address1: 'Rua Desconhecida, s/n',
+        address2: 'Casa 0',
+        city: 'Desaparecida',
+        zip: '123000456',
+        country: 'BR',
+        email:  'email@server.com',
+        phone: '+5511990090009'
+      },
+    };
+  },
+  _basicCancelRecurringPayment = function(orderID) {
+    return {
+      orderID: orderID
+    };
   };
 
 exports.buildGateway = _buildGateway;
@@ -97,3 +191,6 @@ exports.basicSale = _basicSale;
 exports.saleWithToken = _saleWithToken;
 exports.basicAddCard = _basicAddCard;
 exports.basicDeleteCard = _basicDeleteCard;
+exports.basicRecurringPaymentWithToken = _basicRecurringPaymentWithToken;
+exports.basicUpdateRecurringPayment = _basicUpdateRecurringPayment;
+exports.basicCancelRecurringPayment = _basicCancelRecurringPayment;

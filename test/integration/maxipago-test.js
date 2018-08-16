@@ -60,15 +60,15 @@ describe('maxipago.gateway', function() {
 
         mpGateway.addCard(
           card,
-          function() {
+          function(err, mp_err, data) {
+            var token = data.result.token;
             mpGateway.addCard(
               card,
               function(err, mp_err, data) {
                 assert.ok(!err);
-                assert.ok(mp_err);
+                assert.ok(!mp_err);
 
-                assert.equal(data.errorCode, '1');
-                assert.equal(data.errorMessage, 'Card already exists on file.');
+                assert.equal(data.result.token, token);
 
                 done();
               }
@@ -356,6 +356,121 @@ describe('maxipago.gateway', function() {
           });
         }
       );
+    });
+  });
+
+  describe('#recurringPayments', function() {
+    it('create recurringPayment using Token', function(done) {
+      var client = index.basicClient();
+
+      mpGateway.addCustomer(client, function (err, mp_err, data) {
+        var cId = data.result.customerId,
+          card = index.basicAddCard(cId);
+
+        mpGateway.addCard(
+          card,
+          function (err, mp_err, data) {
+            var token = data.result.token,
+             recurring = index.basicRecurringPaymentWithToken(cId, token);
+
+            mpGateway.recurringPayment(
+              recurring,
+              function (err, mp_err, data) {
+                assert.ok(!err);
+                assert.ok(!mp_err);
+
+                assert.ok(data.hasOwnProperty('orderID'));
+                assert.ok(data.hasOwnProperty('transactionID'));
+                assert.ok(data.hasOwnProperty('transactionTimestamp'));
+
+                assert.equal(data.responseMessage, 'APPROVED');
+                assert.equal(data.processorName, 'SIMULATOR');
+
+                done();
+              }
+            );
+          }
+        );
+      });
+    });
+
+    it('update recurringPayment', function(done) {
+      var client = index.basicClient();
+
+      mpGateway.addCustomer(client, function (err, mp_err, data) {
+        var cId = data.result.customerId,
+          card = index.basicAddCard(cId);
+
+        mpGateway.addCard(
+          card,
+          function (err, mp_err, data) {
+            var token = data.result.token,
+             recurringPayment = index.basicRecurringPaymentWithToken(cId, token);
+
+            mpGateway.recurringPayment(
+              recurringPayment,
+              function (err, mp_err, data) {
+                var orderID = data.orderID,
+                updateRecurringPayment = index.basicUpdateRecurringPayment(orderID);
+
+                mpGateway.updateRecurringPayment(
+                    updateRecurringPayment,
+                    function (err, mp_err, data) {
+                    assert.ok(!err);
+                    assert.ok(!mp_err);
+    
+                    assert.equal(data.errorCode, '0');
+                    assert.equal(data.errorMessage, '');
+                    assert.equal(data.command, 'modify-recurring');
+
+                    done();
+                    }
+                );
+              }
+            );
+          }
+        );
+      });
+    });
+
+    it('cancel recurringPayment', function(done) {
+      var client = index.basicClient();
+
+      mpGateway.addCustomer(client, function (err, mp_err, data) {
+        var cId = data.result.customerId,
+          card = index.basicAddCard(cId);
+
+        mpGateway.addCard(
+          card,
+          function (err, mp_err, data) {
+            var token = data.result.token,
+             recurringPayment = index.basicRecurringPaymentWithToken(cId, token);
+
+            mpGateway.recurringPayment(
+              recurringPayment,
+              function (err, mp_err, data) {
+                var orderID = data.orderID,
+                 cancelRecurringPayment = index.basicCancelRecurringPayment(orderID);
+
+                mpGateway.cancelRecurringPayment(
+                  cancelRecurringPayment,
+                    function (err, mp_err, data) {
+
+                    assert.ok(!err);
+                    assert.ok(!mp_err);
+
+                    assert.equal(data.errorCode, '0');
+                    assert.equal(data.errorMessage, '');
+                    assert.equal(data.command, 'cancel-recurring');
+                    
+                    done();
+                    }
+                );
+              }
+            );
+          }
+        );
+      });
     });
   });
 });

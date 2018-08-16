@@ -275,5 +275,97 @@ describe('utils', function() {
         }
       }));
     });
+
+    it('buildRecurringPaymentXML', function() {
+      var data = {
+          'data': 'data'
+        },
+        version = {
+          'version': 'version'
+        },
+        auth = {
+          'auth': 'auth'
+        },
+        xmlOpts = {
+          'opt': 'opt'
+        };
+
+      mp_utils.buildRecurringPaymentXML(data, version, auth, xmlOpts);
+
+      assert.ok(fn_formatObject.calledOnce);
+      assert.ok(fn_formatObject.calledWithExactly(data, models.recurringPayment));
+
+      assert.ok(xml2js.Builder.calledOnce);
+      assert.ok(xml2js.Builder.calledWithExactly(xmlOpts));
+
+      assert.ok(fn_buildObj.calledOnce);
+      assert.ok(fn_buildObj.calledWithExactly({
+        'transaction-request': {
+          version: version,
+          verification: auth,
+          order: {
+            recurringPayment: formattedObj
+          }
+        }
+      }));
+    });
+
+    it('buildUpdateRecurringPaymentXML', function() {
+      var data = {
+          'data': 'data'
+        },
+        auth = {
+          'auth': 'auth'
+        },
+        xmlOpts = {
+          'opt': 'opt'
+        };
+
+      mp_utils.buildUpdateRecurringPaymentXML(data, auth, xmlOpts);
+
+      assert.ok(fn_formatObject.calledOnce);
+      assert.ok(fn_formatObject.calledWithExactly(data, models.updateRecurringPayment));
+
+      assert.ok(xml2js.Builder.calledOnce);
+      assert.ok(xml2js.Builder.calledWithExactly(xmlOpts));
+
+      assert.ok(fn_buildObj.calledOnce);
+      assert.ok(fn_buildObj.calledWithExactly({
+        'api-request': {
+          verification: auth,
+          command: 'modify-recurring',
+          request: formattedObj
+        }
+      }));
+    });
+
+    it('buildCancelRecurringPaymentXML', function() {
+      var data = {
+          'data': 'data'
+        },
+        auth = {
+          'auth': 'auth'
+        },
+        xmlOpts = {
+          'opt': 'opt'
+        };
+
+      mp_utils.buildCancelRecurringPaymentXML(data, auth, xmlOpts);
+
+      assert.ok(fn_formatObject.calledOnce);
+      assert.ok(fn_formatObject.calledWithExactly(data, models.updateRecurringPayment));
+
+      assert.ok(xml2js.Builder.calledOnce);
+      assert.ok(xml2js.Builder.calledWithExactly(xmlOpts));
+
+      assert.ok(fn_buildObj.calledOnce);
+      assert.ok(fn_buildObj.calledWithExactly({
+        'api-request': {
+          verification: auth,
+          command: 'cancel-recurring',
+          request: formattedObj
+        }
+      }));
+    });
   });
 });
