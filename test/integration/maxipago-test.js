@@ -649,4 +649,51 @@ describe('maxipago.gateway', function() {
       });
     });
   });
+
+  describe('#return', function() {
+    it('return an capture', function(done) {
+      var client = index.basicClient();
+      mpGateway.addCustomer(client, function (err, mp_err, data) {
+        var cId = data.result.customerId,
+          auth = index.basicAuth(cId);
+  
+        mpGateway.auth(
+          auth,
+          function (err, mp_err, data) {
+            var orderID =  data.orderID,
+            referenceNum = data.referenceNum,
+            capture = index.basicCapture(orderID, referenceNum);
+
+            mpGateway.capture(
+              capture,
+              function (err, mp_err, data) {
+                var _return = index.basicReturn(orderID, referenceNum);
+
+                mpGateway.return(
+                  _return,
+                  function (err, mp_err, data) {
+                    assert.ok(!err);
+                    assert.ok(!mp_err);
+    
+                    assert.equal(data.errorMessage, '');
+                    assert.equal(data.responseCode, '0');
+                    assert.equal(data.orderID, orderID);
+          
+                    assert.equal(data.responseMessage, 'CAPTURED');
+                    assert.equal(data.processorMessage, 'APPROVED');
+          
+                    assert.ok(data.hasOwnProperty('orderID'));
+          
+                    done();
+                  }
+                );
+                
+              }
+            );
+
+          }
+        );
+      });
+    });
+  });
 });

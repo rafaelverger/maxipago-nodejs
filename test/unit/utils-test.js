@@ -439,5 +439,39 @@ describe('utils', function() {
         }
       }));
     });
+
+    it('buildReturnXML', function() {
+      var data = {
+          'data': 'data'
+        },
+        version = {
+          'version': 'version'
+        },
+        auth = {
+          'auth': 'auth'
+        },
+        xmlOpts = {
+          'opt': 'opt'
+        };
+
+      mp_utils.buildReturnXML(data, version, auth, xmlOpts);
+
+      assert.ok(fn_formatObject.calledOnce);
+      assert.ok(fn_formatObject.calledWithExactly(data, models.return));
+
+      assert.ok(xml2js.Builder.calledOnce);
+      assert.ok(xml2js.Builder.calledWithExactly(xmlOpts));
+
+      assert.ok(fn_buildObj.calledOnce);
+      assert.ok(fn_buildObj.calledWithExactly({
+        'transaction-request': {
+          version: version,
+          verification: auth,
+          order: {
+            return: formattedObj
+          }
+        }
+      }));
+    });
   });
 });

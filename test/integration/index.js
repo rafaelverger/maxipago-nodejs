@@ -294,6 +294,15 @@ var _buildGateway = function() {
     return {
       orderID: orderID
     };
+  },
+  _basicReturn = function(orderId, referenceNum) {
+    return {
+      orderID: orderId,
+      referenceNum: referenceNum, 
+       payment: {
+        chargeTotal: '10.00'
+      }
+    };
   };
 
 exports.buildGateway = _buildGateway;
@@ -311,3 +320,4 @@ exports.basicRecurringPayment = _basicRecurringPayment;
 exports.basicRecurringPaymentWithToken = _basicRecurringPaymentWithToken;
 exports.basicUpdateRecurringPayment = _basicUpdateRecurringPayment;
 exports.basicCancelRecurringPayment = _basicCancelRecurringPayment;
+exports.basicReturn = _basicReturn;
