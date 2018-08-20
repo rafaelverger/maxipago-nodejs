@@ -1,5 +1,6 @@
 require('dotenv').config({path: '../.env'})
 var moment = require('moment'),
+  faker = require('faker'),
   maxipago = require('../../lib/maxipago'),
   testMerchantId = process.env.MP_TEST_ID,
   testMerchantKey = process.env.MP_TEST_KEY;
@@ -11,21 +12,21 @@ var _buildGateway = function() {
     var now =  moment();
     return {
       customerIdExt: now,
-      firstName: 'Fulano',
-      lastName: 'De Tal'
+      firstName: faker.name.findName(),
+      lastName: faker.name.lastName()
     };
   },
   _fullClient = function() {
     var client = _basicClient();
-    client.address1 = 'Rua Desconhecida, s/n';
-    client.address2 = 'Casa 0';
-    client.city = 'Desaparecida';
-    client.state = 'BA';
-    client.zip = '123000-456';
-    client.country = 'BR';
-    client.phone = '+5511990090009';
+    client.address1 = faker.address.streetAddress();
+    client.address2 = faker.address.streetAddress();
+    client.city = faker.address.city();
+    client.state = faker.address.state();
+    client.zip = faker.address.zipCode();
+    client.country = faker.address.country();
+    client.phone = faker.phone.phoneNumber();
     client.email = 'email@server.com';
-    client.dob = '01/01/1970';
+    client.dob = faker.date.past();
     client.sex = 'M';
     return client;
   },
@@ -35,7 +36,7 @@ var _buildGateway = function() {
       creditCardNumber: '4111111111111111',
       expirationMonth: 12,
       expirationYear: 2020,
-      billingName: 'Test Credit Card'
+      billingName: faker.name.findName()
     };
   },
   _basicDeleteCard = function(customerId, token) {
