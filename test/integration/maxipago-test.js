@@ -1,4 +1,5 @@
 var assert = require('assert'),
+  moment = require('moment'),
   index = require('./index');
 
 describe('maxipago.gateway', function() {
@@ -9,7 +10,7 @@ describe('maxipago.gateway', function() {
 
   before(function() {
     count = 0;
-    start = new Date().getTime();
+    start = moment();
 
     mpGateway = index.buildGateway();
   });
@@ -19,7 +20,7 @@ describe('maxipago.gateway', function() {
   });
 
   after(function() {
-    var total = new Date().getTime() - start;
+    var total = moment() - start;
     if (total >= (0.25 * count * itTimeout)) {
       console.warn('Test suite taken too long! ' + total + 'ms');
     }

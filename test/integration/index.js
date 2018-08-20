@@ -1,5 +1,6 @@
 require('dotenv').config({path: '../.env'})
-var maxipago = require('../../lib/maxipago'),
+var moment = require('moment'),
+  maxipago = require('../../lib/maxipago'),
   testMerchantId = process.env.MP_TEST_ID,
   testMerchantKey = process.env.MP_TEST_KEY;
 
@@ -7,11 +8,11 @@ var _buildGateway = function() {
     return new maxipago.Gateway(testMerchantId, testMerchantKey, true);
   },
   _basicClient = function() {
-    var now = new Date().getTime();
+    var now =  moment();
     return {
       customerIdExt: now,
       firstName: 'Fulano',
-      lastName: 'De Tal ' + now
+      lastName: 'De Tal'
     };
   },
   _fullClient = function() {
@@ -44,7 +45,7 @@ var _buildGateway = function() {
     };
   },
   _basicAuth = function(customerId) {
-    var now = new Date().getTime();
+    var now =  moment();
     return {
       processorID: '1',
       referenceNum: 'PONumber-' + now,
@@ -71,7 +72,7 @@ var _buildGateway = function() {
     };
   },
   _basicAuthWithToken = function(customerId, token) {
-    var now = new Date().getTime();
+    var now =  moment();
     return {
       processorID: '1',
       referenceNum: 'PONumber-' + now,
@@ -104,7 +105,7 @@ var _buildGateway = function() {
     };
   },
   _basicSale = function(customerId, forValidSale) {
-    var now = new Date().getTime();
+    var now =  moment();
     return {
       processorID: '1',
       referenceNum: 'PONumber-' + now,
@@ -131,7 +132,7 @@ var _buildGateway = function() {
     };
   },
   _basicSaleWithToken = function(customerId, token) {
-    var now = new Date().getTime();
+    var now =  moment();
     return {
       processorID: '1',
       referenceNum: 'PONumber-' + now,
@@ -150,8 +151,8 @@ var _buildGateway = function() {
     };
   },
   _basicRecurringPayment = function() {
-    var now = new Date().getTime();  
-    var tomorrow = new Date().getFullYear() + '-0' + (new Date().getMonth() +1) + '-' + (new Date().getDate() + 1) ;
+    var now =  moment();
+    var tomorrow = moment().add(1, 'days').format('YYYY-MM-DD');
     return {
       processorID: '1',
       referenceNum: 'PONumber-' + now,
@@ -202,8 +203,8 @@ var _buildGateway = function() {
     };
   },
   _basicRecurringPaymentWithToken = function(customerId, token) {
-    var now = new Date().getTime();  
-    var tomorrow = new Date().getFullYear() + '-0' + (new Date().getMonth() +1) + '-' + (new Date().getDate() + 1) ;
+    var now =  moment();
+    var tomorrow = moment().add(1, 'days').format('YYYY-MM-DD');
     return {
       processorID: '1',
       referenceNum: 'PONumber-' + now,
@@ -252,7 +253,7 @@ var _buildGateway = function() {
     };
   },
   _basicUpdateRecurringPayment = function(orderID) {
-    var tomorrow = new Date().getFullYear() + '-0' + (new Date().getMonth() +1) + '-' + (new Date().getDate() + 7) ;
+    var fiveDaysAhead = moment().add(1, 'days').format('YYYY-MM-DD');
     return {
       orderID: orderID,
       paymentInfo: {
@@ -264,7 +265,7 @@ var _buildGateway = function() {
         processorID: '1',
         action: 'disable',
         installments: '11',
-        nextFireDate: tomorrow,
+        nextFireDate: fiveDaysAhead,
         fireDay: '20',
         period: 'quarterly',
       },
