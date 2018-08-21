@@ -2,37 +2,37 @@ var assert = require('assert'),
   moment = require('moment'),
   index = require('./index');
 
-describe('maxipago.gateway', function() {
+describe('maxipago.gateway', function () {
   var start, count, itTimeout = 30000,
     mpGateway = null;
 
   this.timeout(itTimeout);
 
-  before(function() {
+  before(function () {
     count = 0;
     start = moment();
 
     mpGateway = index.buildGateway();
   });
 
-  beforeEach(function() {
+  beforeEach(function () {
     count++;
   });
 
-  after(function() {
+  after(function () {
     var total = moment() - start;
     if (total >= (0.25 * count * itTimeout)) {
       console.warn('Test suite taken too long! ' + total + 'ms');
     }
   });
 
-  describe('#addCustomer', function() {
-    it('add customer basic data', function(done) {
+  describe('#addCustomer', function () {
+    it('add customer basic data', function (done) {
       var client = index.basicClient();
 
       mpGateway.addCustomer(
         client,
-        function(err, mp_err, data) {
+        function (err, mp_err, data) {
           assert.ok(!err);
           assert.ok(!mp_err);
 
@@ -48,12 +48,12 @@ describe('maxipago.gateway', function() {
       );
     });
 
-    it('add customer full data', function(done) {
+    it('add customer full data', function (done) {
       var client = index.fullClient();
 
       mpGateway.addCustomer(
         client,
-        function(err, mp_err, data) {
+        function (err, mp_err, data) {
           assert.ok(!err);
           assert.ok(!mp_err);
 
@@ -69,17 +69,17 @@ describe('maxipago.gateway', function() {
       );
     });
 
-    it('add customer full data with unordered request', function(done) {
+    it('add customer full data with unordered request', function (done) {
       var client = index.fullClient(),
         unordered_client = {};
 
-      Object.keys(client).reverse().forEach(function(key) {
+      Object.keys(client).reverse().forEach(function (key) {
         unordered_client[key] = client[key];
       });
 
       mpGateway.addCustomer(
         unordered_client,
-        function(err, mp_err, data) {
+        function (err, mp_err, data) {
           assert.ok(!err);
           assert.ok(!mp_err);
 
@@ -95,18 +95,18 @@ describe('maxipago.gateway', function() {
       );
     });
   });
-  describe('#updateCustomer', function() {
-    it('update customer data', function(done) {
+  describe('#updateCustomer', function () {
+    it('update customer data', function (done) {
       var client = index.basicClient();
       mpGateway.addCustomer(
         client,
-        function(err, mp_err, data) {
+        function (err, mp_err, data) {
           var cId = data.result.customerId;
 
           client.customerId = cId;
           client.firstName += ' updated';
           client.lastName += ' updated';
-          mpGateway.updateCustomer(client, function(err, mp_err, data) {
+          mpGateway.updateCustomer(client, function (err, mp_err, data) {
             assert.ok(!err);
             assert.ok(!mp_err);
 
@@ -123,23 +123,23 @@ describe('maxipago.gateway', function() {
       );
     });
 
-    it('update customer data with unordered request', function(done) {
+    it('update customer data with unordered request', function (done) {
       var client = index.fullClient(),
         unordered_client = {};
 
-      Object.keys(client).reverse().forEach(function(key) {
+      Object.keys(client).reverse().forEach(function (key) {
         unordered_client[key] = client[key];
       });
 
       mpGateway.addCustomer(
         client,
-        function(err, mp_err, data) {
+        function (err, mp_err, data) {
           var cId = data.result.customerId;
 
           unordered_client.customerId = cId;
           unordered_client.firstName += ' updated';
           unordered_client.lastName += ' updated';
-          mpGateway.updateCustomer(unordered_client, function(err, mp_err, data) {
+          mpGateway.updateCustomer(unordered_client, function (err, mp_err, data) {
             assert.ok(!err);
             assert.ok(!mp_err);
 
@@ -157,17 +157,17 @@ describe('maxipago.gateway', function() {
     });
   });
 
-  describe('#addCard', function() {
+  describe('#addCard', function () {
 
-    it('add new card', function(done) {
+    it('add new card', function (done) {
       var client = index.basicClient();
-      mpGateway.addCustomer(client, function(err, mp_err, data) {
+      mpGateway.addCustomer(client, function (err, mp_err, data) {
         var cId = data.result.customerId,
           card = index.basicAddCard(cId);
 
         mpGateway.addCard(
           card,
-          function(err, mp_err, data) {
+          function (err, mp_err, data) {
             assert.ok(!err);
             assert.ok(!mp_err);
 
@@ -184,19 +184,19 @@ describe('maxipago.gateway', function() {
       });
     });
 
-    it('add existing card', function(done) {
+    it('add existing card', function (done) {
       var client = index.basicClient();
-      mpGateway.addCustomer(client, function(err, mp_err, data) {
+      mpGateway.addCustomer(client, function (err, mp_err, data) {
         var cId = data.result.customerId,
           card = index.basicAddCard(cId);
 
         mpGateway.addCard(
           card,
-          function(err, mp_err, data) {
+          function (err, mp_err, data) {
             var token = data.result.token;
             mpGateway.addCard(
               card,
-              function(err, mp_err, data) {
+              function (err, mp_err, data) {
                 assert.ok(!err);
                 assert.ok(!mp_err);
 
@@ -210,23 +210,23 @@ describe('maxipago.gateway', function() {
       });
     });
   });
-  describe('#deleteCard', function() {
-    it('delete existing card', function(done) {
+  describe('#deleteCard', function () {
+    it('delete existing card', function (done) {
 
       var client = index.basicClient();
-      mpGateway.addCustomer(client, function(err, mp_err, data) {
+      mpGateway.addCustomer(client, function (err, mp_err, data) {
         var cId = data.result.customerId,
           card = index.basicAddCard(cId);
 
         mpGateway.addCard(
           card,
-          function(err, mp_err, data) {
+          function (err, mp_err, data) {
             var token = data.result.token,
               card = index.basicDeleteCard(cId, token);
 
             mpGateway.deleteCard(
               card,
-              function(err, mp_err, data) {
+              function (err, mp_err, data) {
                 assert.ok(!err);
                 assert.ok(!mp_err);
 
@@ -243,19 +243,19 @@ describe('maxipago.gateway', function() {
     });
   });
 
-  describe('#auth', function() {
-    it('add auth', function(done) {
+  describe('#auth', function () {
+    it('add auth', function (done) {
       var client = index.basicClient();
       mpGateway.addCustomer(client, function (err, mp_err, data) {
         var cId = data.result.customerId,
           auth = index.basicAuth(cId);
-  
+
         mpGateway.auth(
           auth,
           function (err, mp_err, data) {
             assert.ok(!err);
             assert.ok(!mp_err);
-  
+
             assert.equal(data.authCode, '123456');
             assert.equal(data.referenceNum, auth.referenceNum);
             assert.equal(data.errorMessage, '');
@@ -265,34 +265,34 @@ describe('maxipago.gateway', function() {
             assert.equal(data.cvvResponseCode, 'M');
             assert.equal(data.processorCode, 'A');
             assert.equal(data.processorMessage, 'APPROVED');
-  
+
             assert.ok(data.hasOwnProperty('orderID'));
             assert.ok(data.hasOwnProperty('transactionID'));
             assert.ok(data.hasOwnProperty('transactionTimestamp'));
-  
+
             done();
           }
         );
       });
     });
-  
-    it('add auth using token', function(done) {
+
+    it('add auth using token', function (done) {
       var client = index.basicClient();
-   
+
       mpGateway.addCustomer(client, function (err, mp_err, data) {
         var cId = data.result.customerId,
-         card = index.basicAddCard(cId);
-      
+          card = index.basicAddCard(cId);
+
         mpGateway.addCard(
           card,
           function (err, mp_err, data) {
             var token = data.result.token,
-             auth = index.basicAuthWithToken(cId,token);
-  
+              auth = index.basicAuthWithToken(cId, token);
+
             mpGateway.auth(
               auth,
               function (err, mp_err, data) {
-                
+
                 assert.ok(!err);
                 assert.ok(!mp_err);
                 assert.equal(data.authCode, '123456');
@@ -304,32 +304,32 @@ describe('maxipago.gateway', function() {
                 assert.equal(data.cvvResponseCode, 'M');
                 assert.equal(data.processorCode, 'A');
                 assert.equal(data.processorMessage, 'APPROVED');
-      
+
                 assert.ok(data.hasOwnProperty('orderID'));
                 assert.ok(data.hasOwnProperty('transactionID'));
                 assert.ok(data.hasOwnProperty('transactionTimestamp'));
-  
+
                 done();
               }
             );
           })
-  
+
       });
     });
   });
-  describe('#capture', function() {
-    it('capture an auth', function(done) {
+  describe('#capture', function () {
+    it('capture an auth', function (done) {
       var client = index.basicClient();
       mpGateway.addCustomer(client, function (err, mp_err, data) {
         var cId = data.result.customerId,
           auth = index.basicAuth(cId);
-  
+
         mpGateway.auth(
           auth,
           function (err, mp_err, data) {
-            var orderID =  data.orderID,
-            referenceNum = data.referenceNum,
-            capture = index.basicCapture(orderID, referenceNum);
+            var orderID = data.orderID,
+              referenceNum = data.referenceNum,
+              capture = index.basicCapture(orderID, referenceNum);
 
             mpGateway.capture(
               capture,
@@ -339,12 +339,12 @@ describe('maxipago.gateway', function() {
 
                 assert.equal(data.errorMessage, '');
                 assert.equal(data.responseCode, '0');
-      
+
                 assert.equal(data.responseMessage, 'CAPTURED');
                 assert.equal(data.processorMessage, 'APPROVED');
-      
+
                 assert.ok(data.hasOwnProperty('orderID'));
-      
+
                 done();
               }
             );
@@ -354,39 +354,39 @@ describe('maxipago.gateway', function() {
       });
     });
   });
-  describe('#void', function() {
-    it('void an capture', function(done) {
+  describe('#void', function () {
+    it('void an capture', function (done) {
       var client = index.basicClient();
       mpGateway.addCustomer(client, function (err, mp_err, data) {
         var cId = data.result.customerId,
           auth = index.basicAuth(cId);
-  
+
         mpGateway.auth(
           auth,
           function (err, mp_err, data) {
-            var orderID =  data.orderID,
-            referenceNum = data.referenceNum,
-            capture = index.basicCapture(orderID, referenceNum);
+            var orderID = data.orderID,
+              referenceNum = data.referenceNum,
+              capture = index.basicCapture(orderID, referenceNum);
 
             mpGateway.capture(
               capture,
               function (err, mp_err, data) {
                 var transactionID = data.transactionID,
-                 _void = index.basicVoid(transactionID);
-               
-                 mpGateway.void(
+                  _void = index.basicVoid(transactionID);
+
+                mpGateway.void(
                   _void,
                   function (err, mp_err, data) {
                     assert.ok(!err);
                     assert.ok(!mp_err);
-    
+
                     assert.equal(data.errorMessage, '');
                     assert.equal(data.responseCode, '0');
                     assert.equal(data.transactionID, transactionID);
-          
+
                     assert.equal(data.responseMessage, 'VOIDED');
                     assert.equal(data.processorMessage, 'APPROVED');
-                    
+
                     done();
                   }
                 );
@@ -399,17 +399,16 @@ describe('maxipago.gateway', function() {
       });
     });
   });
-  
-  describe('#sale', function() {
-    it('add fresh sale', function(done) {
+  describe('#sale', function () {
+    it('add fresh sale', function (done) {
       var client = index.basicClient();
-      mpGateway.addCustomer(client, function(err, mp_err, data) {
+      mpGateway.addCustomer(client, function (err, mp_err, data) {
         var cId = data.result.customerId,
           sale = index.basicSale(cId, true);
 
         mpGateway.sale(
           sale,
-          function(err, mp_err, data) {
+          function (err, mp_err, data) {
             assert.ok(!err);
             assert.ok(!mp_err);
 
@@ -436,15 +435,15 @@ describe('maxipago.gateway', function() {
       });
     });
 
-    it('add fresh sale with failed response', function(done) {
+    it('add fresh sale with failed response', function (done) {
       var client = index.basicClient();
-      mpGateway.addCustomer(client, function(err, mp_err, data) {
+      mpGateway.addCustomer(client, function (err, mp_err, data) {
         var cId = data.result.customerId,
           sale = index.basicSale(cId, false);
 
         mpGateway.sale(
           sale,
-          function(err, mp_err, data) {
+          function (err, mp_err, data) {
             assert.ok(!err);
             assert.ok(!mp_err);
 
@@ -474,21 +473,21 @@ describe('maxipago.gateway', function() {
       });
     });
 
-    it('add fresh sale using token', function(done) {
+    it('add fresh sale using token', function (done) {
       var client = index.basicClient();
-      mpGateway.addCustomer(client, function(err, mp_err, data) {
+      mpGateway.addCustomer(client, function (err, mp_err, data) {
         var cId = data.result.customerId,
           sale = index.basicSale(cId, true);
 
         mpGateway.sale(
           sale,
-          function(err, mp_err, data) {
+          function (err, mp_err, data) {
             var token = data['save-on-file'].token,
               sale = index.basicSaleWithToken(cId, token);
 
             mpGateway.sale(
               sale,
-              function(err, mp_err, data) {
+              function (err, mp_err, data) {
                 assert.ok(!err);
                 assert.ok(!mp_err);
 
@@ -515,9 +514,55 @@ describe('maxipago.gateway', function() {
     });
 
   });
+  describe('#returnPayment', function () {
+    it('return an capture', function (done) {
+      var client = index.basicClient();
+      mpGateway.addCustomer(client, function (err, mp_err, data) {
+        var cId = data.result.customerId,
+          auth = index.basicAuth(cId);
 
-  describe('#recurringPayments', function() {
-    it('add recurring payment', function(done) {
+        mpGateway.auth(
+          auth,
+          function (err, mp_err, data) {
+            var orderID = data.orderID,
+              referenceNum = data.referenceNum,
+              capture = index.basicCapture(orderID, referenceNum);
+
+            mpGateway.capture(
+              capture,
+              function (err, mp_err, data) {
+                var returnPayment = index.basicReturnPayment(orderID, referenceNum);
+
+                mpGateway.returnPayment(
+                  returnPayment,
+                  function (err, mp_err, data) {
+                    assert.ok(!err);
+                    assert.ok(!mp_err);
+
+                    assert.equal(data.errorMessage, '');
+                    assert.equal(data.responseCode, '0');
+                    assert.equal(data.orderID, orderID);
+
+                    assert.equal(data.responseMessage, 'CAPTURED');
+                    assert.equal(data.processorMessage, 'APPROVED');
+
+                    assert.ok(data.hasOwnProperty('orderID'));
+
+                    done();
+                  }
+                );
+
+              }
+            );
+
+          }
+        );
+      });
+    });
+  });
+
+  describe('#recurringPayments', function () {
+    it('add recurring payment', function (done) {
       var recurring = index.basicRecurringPayment();
       mpGateway.recurringPayment(
         recurring,
@@ -537,7 +582,7 @@ describe('maxipago.gateway', function() {
       );
     });
 
-    it('add recurring payment using token', function(done) {
+    it('add recurring payment using token', function (done) {
       var client = index.basicClient();
 
       mpGateway.addCustomer(client, function (err, mp_err, data) {
@@ -571,7 +616,7 @@ describe('maxipago.gateway', function() {
       });
     });
 
-    it('update recurring payment', function(done) {
+    it('update recurring payment', function (done) {
       var client = index.basicClient();
 
       mpGateway.addCustomer(client, function (err, mp_err, data) {
@@ -610,7 +655,7 @@ describe('maxipago.gateway', function() {
       });
     });
 
-    it('cancel recurring payment', function(done) {
+    it('cancel recurring payment', function (done) {
       var client = index.basicClient();
 
       mpGateway.addCustomer(client, function (err, mp_err, data) {
@@ -645,53 +690,6 @@ describe('maxipago.gateway', function() {
                 );
               }
             );
-          }
-        );
-      });
-    });
-  });
-
-  describe('#return', function() {
-    it('return an capture', function(done) {
-      var client = index.basicClient();
-      mpGateway.addCustomer(client, function (err, mp_err, data) {
-        var cId = data.result.customerId,
-          auth = index.basicAuth(cId);
-  
-        mpGateway.auth(
-          auth,
-          function (err, mp_err, data) {
-            var orderID =  data.orderID,
-            referenceNum = data.referenceNum,
-            capture = index.basicCapture(orderID, referenceNum);
-
-            mpGateway.capture(
-              capture,
-              function (err, mp_err, data) {
-                var _return = index.basicReturn(orderID, referenceNum);
-
-                mpGateway.return(
-                  _return,
-                  function (err, mp_err, data) {
-                    assert.ok(!err);
-                    assert.ok(!mp_err);
-    
-                    assert.equal(data.errorMessage, '');
-                    assert.equal(data.responseCode, '0');
-                    assert.equal(data.orderID, orderID);
-          
-                    assert.equal(data.responseMessage, 'CAPTURED');
-                    assert.equal(data.processorMessage, 'APPROVED');
-          
-                    assert.ok(data.hasOwnProperty('orderID'));
-          
-                    done();
-                  }
-                );
-                
-              }
-            );
-
           }
         );
       });

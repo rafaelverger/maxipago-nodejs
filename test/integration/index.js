@@ -1,22 +1,22 @@
-require('dotenv').config({path: '../.env'})
+require('dotenv').config({ path: '../.env' })
 var moment = require('moment'),
   faker = require('faker'),
   maxipago = require('../../lib/maxipago'),
   testMerchantId = process.env.MP_TEST_ID,
   testMerchantKey = process.env.MP_TEST_KEY;
 
-  var _buildGateway = function() {
-    return new maxipago.Gateway(testMerchantId, testMerchantKey, true);
-  },
-  _basicClient = function() {
-    var id = Math.floor(Math.random() * (10000 - 100) ) + 100;
+var _buildGateway = function () {
+  return new maxipago.Gateway(testMerchantId, testMerchantKey, true);
+},
+  _basicClient = function () {
+    var id = Math.floor(Math.random() * (10000 - 100)) + 100;
     return {
       customerIdExt: id,
       firstName: faker.name.findName(),
       lastName: faker.name.lastName()
     };
   },
-  _fullClient = function() {
+  _fullClient = function () {
     var client = _basicClient();
     client.address1 = faker.address.streetAddress();
     client.address2 = faker.address.streetAddress();
@@ -26,11 +26,11 @@ var moment = require('moment'),
     client.country = faker.address.countryCode();
     client.phone = faker.phone.phoneNumberFormat(3);
     client.email = faker.internet.email();
-    client.dob =  moment(faker.date.past()).format('MM/DD/YYYY');
+    client.dob = moment(faker.date.past()).format('MM/DD/YYYY');
     client.sex = (client.customerIdExt % 2 == 0) ? 'M' : 'F';
     return client;
   },
-  _basicAddCard = function(customerId, customerName) {
+  _basicAddCard = function (customerId, customerName) {
     return {
       customerId: customerId,
       creditCardNumber: '4111111111111111',
@@ -39,14 +39,14 @@ var moment = require('moment'),
       billingName: customerName
     };
   },
-  _basicDeleteCard = function(customerId, token) {
+  _basicDeleteCard = function (customerId, token) {
     return {
       customerId: customerId,
       token: token
     };
   },
-  _basicAuth = function(customerId, customerName) {
-    var id = Math.floor(Math.random() * (10000 - 100) ) + 100;
+  _basicAuth = function (customerId, customerName) {
+    var id = Math.floor(Math.random() * (10000 - 100)) + 100;
     return {
       processorID: '1',
       referenceNum: 'PONumber-' + id,
@@ -72,8 +72,8 @@ var moment = require('moment'),
       }
     };
   },
-  _basicAuthWithToken = function(customerId, token) {
-    var id = Math.floor(Math.random() * (10000 - 100) ) + 100;
+  _basicAuthWithToken = function (customerId, token) {
+    var id = Math.floor(Math.random() * (10000 - 100)) + 100;
     return {
       processorID: '1',
       referenceNum: 'PONumber-' + id,
@@ -91,7 +91,7 @@ var moment = require('moment'),
       }
     };
   },
-  _basicCapture = function(orderId, referenceNum) {
+  _basicCapture = function (orderId, referenceNum) {
     return {
       orderID: orderId,
       referenceNum: referenceNum,
@@ -100,13 +100,13 @@ var moment = require('moment'),
       }
     };
   },
-  _basicVoid = function(transactionID) {
+  _basicVoid = function (transactionID) {
     return {
       transactionID: transactionID,
     };
   },
-  _basicSale = function(customerId, forValidSale, customerName) {
-    var id = Math.floor(Math.random() * (10000 - 100) ) + 100;
+  _basicSale = function (customerId, forValidSale, customerName) {
+    var id = Math.floor(Math.random() * (10000 - 100)) + 100;
     return {
       processorID: '1',
       referenceNum: 'PONumber-' + id,
@@ -132,8 +132,8 @@ var moment = require('moment'),
       }
     };
   },
-  _basicSaleWithToken = function(customerId, token) {
-    var id = Math.floor(Math.random() * (10000 - 100) ) + 100;
+  _basicSaleWithToken = function (customerId, token) {
+    var id = Math.floor(Math.random() * (10000 - 100)) + 100;
     return {
       processorID: '1',
       referenceNum: 'PONumber-' + id,
@@ -151,8 +151,17 @@ var moment = require('moment'),
       }
     };
   },
-  _basicRecurringPayment = function() {
-    var id = Math.floor(Math.random() * (10000 - 100) ) + 100;
+  _basicReturnPayment = function (orderId, referenceNum) {
+    return {
+      orderID: orderId,
+      referenceNum: referenceNum,
+      payment: {
+        chargeTotal: '10.00'
+      }
+    };
+  },
+  _basicRecurringPayment = function () {
+    var id = Math.floor(Math.random() * (10000 - 100)) + 100;
     var tomorrow = moment().add(1, 'days').format('YYYY-MM-DD');
     return {
       processorID: '1',
@@ -203,8 +212,8 @@ var moment = require('moment'),
       }
     };
   },
-  _basicRecurringPaymentWithToken = function(customerId, token) {
-    var id = Math.floor(Math.random() * (10000 - 100) ) + 100;
+  _basicRecurringPaymentWithToken = function (customerId, token) {
+    var id = Math.floor(Math.random() * (10000 - 100)) + 100;
     var tomorrow = moment().add(1, 'days').format('YYYY-MM-DD');
     return {
       processorID: '1',
@@ -253,7 +262,7 @@ var moment = require('moment'),
       }
     };
   },
-  _basicUpdateRecurringPayment = function(orderID) {
+  _basicUpdateRecurringPayment = function (orderID) {
     var fiveDaysAhead = moment().add(1, 'days').format('YYYY-MM-DD');
     return {
       orderID: orderID,
@@ -277,7 +286,7 @@ var moment = require('moment'),
         city: faker.address.city(),
         zip: faker.address.zipCode('#########'),
         country: faker.address.countryCode(),
-        email:  faker.internet.email(),
+        email: faker.internet.email(),
         phone: faker.phone.phoneNumberFormat(3)
       },
       shippingInfo: {
@@ -287,23 +296,14 @@ var moment = require('moment'),
         city: faker.address.city(),
         zip: faker.address.zipCode('#########'),
         country: faker.address.countryCode(),
-        email:  faker.internet.email(),
+        email: faker.internet.email(),
         phone: faker.phone.phoneNumberFormat(3)
       },
     };
   },
-  _basicCancelRecurringPayment = function(orderID) {
+  _basicCancelRecurringPayment = function (orderID) {
     return {
       orderID: orderID
-    };
-  },
-  _basicReturn = function(orderId, referenceNum) {
-    return {
-      orderID: orderId,
-      referenceNum: referenceNum,
-      payment: {
-        chargeTotal: '10.00'
-      }
     };
   };
 
@@ -318,8 +318,8 @@ exports.basicCapture = _basicCapture;
 exports.basicVoid = _basicVoid;
 exports.basicSale = _basicSale;
 exports.basicSaleWithToken = _basicSaleWithToken;
+exports.basicReturnPayment = _basicReturnPayment;
 exports.basicRecurringPayment = _basicRecurringPayment;
 exports.basicRecurringPaymentWithToken = _basicRecurringPaymentWithToken;
 exports.basicUpdateRecurringPayment = _basicUpdateRecurringPayment;
 exports.basicCancelRecurringPayment = _basicCancelRecurringPayment;
-exports.basicReturn = _basicReturn;
