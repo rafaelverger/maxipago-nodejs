@@ -341,7 +341,7 @@ describe('utils', function () {
         }
       }));
     });
-    it('buildReturnXML', function () {
+    it('buildReturnPaymentXML', function () {
       var data = {
         'data': 'data'
       },
@@ -355,7 +355,7 @@ describe('utils', function () {
           'opt': 'opt'
         };
 
-      mp_utils.buildReturnXML(data, version, auth, xmlOpts);
+      mp_utils.buildReturnPaymentXML(data, version, auth, xmlOpts);
 
       assert.ok(fn_formatObject.calledOnce);
       assert.ok(fn_formatObject.calledWithExactly(data, models.returnPayment));
