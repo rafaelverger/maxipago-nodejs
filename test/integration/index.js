@@ -30,6 +30,11 @@ var _buildGateway = function () {
     client.sex = (client.customerIdExt % 2 == 0) ? 'M' : 'F';
     return client;
   },
+  _basicDeleteCustomer = function (customerId, token) {
+    return {
+      customerId: customerId
+    };
+  },
   _basicAddCard = function (customerId, customerName) {
     return {
       customerId: customerId,
@@ -310,6 +315,7 @@ var _buildGateway = function () {
 exports.buildGateway = _buildGateway;
 exports.basicClient = _basicClient;
 exports.fullClient = _fullClient;
+exports.basicDeleteCustomer = _basicDeleteCustomer;
 exports.basicAddCard = _basicAddCard;
 exports.basicDeleteCard = _basicDeleteCard;
 exports.basicAuth = _basicAuth;

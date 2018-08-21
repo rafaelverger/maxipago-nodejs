@@ -156,6 +156,31 @@ describe('maxipago.gateway', function () {
       );
     });
   });
+  describe('#deleteCustomer', function () {
+    it('delete customer data', function (done) {
+      var client = index.basicClient();
+      mpGateway.addCustomer(
+        client,
+        function (err, mp_err, data) {
+          var customer =  index.basicDeleteCustomer(data.result.customerId);
+
+          mpGateway.deleteCustomer(customer, function (err, mp_err, data) {
+            assert.ok(!err);
+            assert.ok(!mp_err);
+
+            assert.equal(data.errorCode, '0');
+            assert.equal(data.errorMessage, '');
+            assert.equal(data.command, 'delete-consumer');
+
+            assert.ok(data.hasOwnProperty('result'));
+            assert.equal(data.result, '');
+
+            done();
+          });
+        }
+      );
+    });
+  });
 
   describe('#addCard', function () {
 
