@@ -36,6 +36,9 @@
     "test": "node test/all.js"
   },
   "dependencies": {
+    "dotenv": "^6.0.0",
+    "faker": "^4.1.0",
+    "moment": "^2.22.2",
     "restify-clients": "^1.5.2",
     "xml2js": ">=0.4.19"
   },

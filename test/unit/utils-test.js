@@ -3,17 +3,17 @@ var proxyquire = require('proxyquire'),
   assert = require('assert'),
   models = require('../../lib/models');
 
-describe('utils', function() {
-  describe('#formatObject', function() {
-    it('return obj with only allowed attributes in correct order', function() {
+describe('utils', function () {
+  describe('#formatObject', function () {
+    it('return obj with only allowed attributes in correct order', function () {
 
       var strict_obj = {
-          a: undefined,
-          b: undefined,
-          c: {
-            d: undefined
-          }
-        },
+        a: undefined,
+        b: undefined,
+        c: {
+          d: undefined
+        }
+      },
         to_format = {
           d: 'd',
           c: {
@@ -42,7 +42,7 @@ describe('utils', function() {
     });
   });
 
-  describe('#build XML helpers', function() {
+  describe('#build XML helpers', function () {
     var sandbox,
       xml2js,
       fn_buildObj,
@@ -50,12 +50,12 @@ describe('utils', function() {
       fn_formatObject,
       mp_utils;
 
-    before(function() {
+    before(function () {
       sandbox = sinon.sandbox.create();
 
       fn_buildObj = sandbox.spy();
       xml2js = {
-        Builder: sandbox.spy(function() {
+        Builder: sandbox.spy(function () {
           return {
             buildObject: fn_buildObj
           };
@@ -70,20 +70,33 @@ describe('utils', function() {
       fn_formatObject = sandbox.stub(mp_utils, 'formatObject');
       fn_formatObject.returns(formattedObj);
     });
-    afterEach(function() {
+    afterEach(function () {
       fn_buildObj.reset();
-      xml2js.Builder.reset();
-      fn_formatObject.reset();
+      xml2js = {
+        Builder: sandbox.spy(function () {
+          return {
+            buildObject: fn_buildObj
+          };
+        })
+      };
+      mp_utils = proxyquire('../../lib/utils', {
+        'xml2js': xml2js
+      });
+
+      formattedObj = 'formattedObj';
+      fn_formatObject = sandbox.stub(mp_utils, 'formatObject');
+      fn_formatObject.returns(formattedObj);
     });
 
-    after(function() {
+    after(function () {
       sandbox.restore();
     });
 
-    it('buildAddCustomerXML', function() {
+
+    it('buildAddCustomerXML', function () {
       var data = {
-          'data': 'data'
-        },
+        'data': 'data'
+      },
         auth = {
           'auth': 'auth'
         },
@@ -108,11 +121,10 @@ describe('utils', function() {
         }
       }));
     });
-
-    it('buildUpdateCustomerXML', function() {
+    it('buildUpdateCustomerXML', function () {
       var data = {
-          'data': 'data'
-        },
+        'data': 'data'
+      },
         auth = {
           'auth': 'auth'
         },
@@ -137,10 +149,169 @@ describe('utils', function() {
       }));
     });
 
-    it('buildSaleXML', function() {
+
+    it('buildAddCardXML', function () {
       var data = {
-          'data': 'data'
+        'expirationMonth': 12
+      },
+        fixedData = {
+          'expirationMonth': '12'
         },
+        auth = {
+          'auth': 'auth'
+        },
+        xmlOpts = {
+          'opt': 'opt'
+        };
+
+      mp_utils.buildAddCardXML(data, auth, xmlOpts);
+
+      assert.ok(fn_formatObject.calledOnce);
+      assert.ok(fn_formatObject.calledWithExactly(fixedData, models.addCard));
+
+      assert.ok(xml2js.Builder.calledOnce);
+      assert.ok(xml2js.Builder.calledWithExactly(xmlOpts));
+
+      assert.ok(fn_buildObj.calledOnce);
+      assert.ok(fn_buildObj.calledWithExactly({
+        'api-request': {
+          verification: auth,
+          command: 'add-card-onfile',
+          request: formattedObj
+        }
+      }));
+    });
+    it('buildAddCardXML with month < 10', function () {
+      var data = {
+        'expirationMonth': 1
+      },
+        fixedData = {
+          'expirationMonth': '01'
+        },
+        auth = {
+          'auth': 'auth'
+        },
+        xmlOpts = {
+          'opt': 'opt'
+        };
+
+      mp_utils.buildAddCardXML(data, auth, xmlOpts);
+
+      assert.ok(fn_formatObject.calledOnce);
+      assert.ok(fn_formatObject.calledWithExactly(fixedData, models.addCard));
+
+      assert.ok(xml2js.Builder.calledOnce);
+      assert.ok(xml2js.Builder.calledWithExactly(xmlOpts));
+
+      assert.ok(fn_buildObj.calledOnce);
+      assert.ok(fn_buildObj.calledWithExactly({
+        'api-request': {
+          verification: auth,
+          command: 'add-card-onfile',
+          request: formattedObj
+        }
+      }));
+    });
+    it('buildDeleteCardXML', function () {
+      var data = {
+        'data': 'data'
+      },
+        auth = {
+          'auth': 'auth'
+        },
+        xmlOpts = {
+          'opt': 'opt'
+        };
+
+      mp_utils.buildDeleteCardXML(data, auth, xmlOpts);
+
+      assert.ok(fn_formatObject.calledOnce);
+      assert.ok(fn_formatObject.calledWithExactly(data, models.deleteCard));
+
+      assert.ok(xml2js.Builder.calledOnce);
+      assert.ok(xml2js.Builder.calledWithExactly(xmlOpts));
+
+      assert.ok(fn_buildObj.calledOnce);
+      assert.ok(fn_buildObj.calledWithExactly({
+        'api-request': {
+          verification: auth,
+          command: 'delete-card-onfile',
+          request: formattedObj
+        }
+      }));
+    });
+
+
+    it('buildAuthXML', function () {
+      var data = {
+        'data': 'data'
+      },
+        version = {
+          'version': 'version'
+        },
+        auth = {
+          'auth': 'auth'
+        },
+        xmlOpts = {
+          'opt': 'opt'
+        };
+
+      mp_utils.buildAuthXML(data, version, auth, xmlOpts);
+
+      assert.ok(fn_formatObject.calledOnce);
+      assert.ok(fn_formatObject.calledWithExactly(data, models.sale));
+
+      assert.ok(xml2js.Builder.calledOnce);
+      assert.ok(xml2js.Builder.calledWithExactly(xmlOpts));
+
+      assert.ok(fn_buildObj.calledOnce);
+      assert.ok(fn_buildObj.calledWithExactly({
+        'transaction-request': {
+          version: version,
+          verification: auth,
+          order: {
+            auth: formattedObj
+          }
+        }
+      }));
+    });
+    it('buildCaptureXML', function () {
+      var data = {
+        'data': 'data'
+      },
+        version = {
+          'version': 'version'
+        },
+        auth = {
+          'auth': 'auth'
+        },
+        xmlOpts = {
+          'opt': 'opt'
+        };
+
+      mp_utils.buildCaptureXML(data, version, auth, xmlOpts);
+
+      assert.ok(fn_formatObject.calledOnce);
+      assert.ok(fn_formatObject.calledWithExactly(data, models.capture));
+
+      assert.ok(xml2js.Builder.calledOnce);
+      assert.ok(xml2js.Builder.calledWithExactly(xmlOpts));
+
+      assert.ok(fn_buildObj.calledOnce);
+      assert.ok(fn_buildObj.calledWithExactly({
+        'transaction-request': {
+          version: version,
+          verification: auth,
+          order: {
+            capture: formattedObj
+          }
+        }
+      }));
+    });
+    it('buildSaleXML', function () {
+      var data = {
+        'data': 'data'
+      },
         version = {
           'version': 'version'
         },
@@ -170,13 +341,12 @@ describe('utils', function() {
         }
       }));
     });
-
-    it('buildAddCardXML', function() {
+    it('buildReturnPaymentXML', function () {
       var data = {
-          'expirationMonth': 12
-        },
-        fixedData = {
-          'expirationMonth': '12'
+        'data': 'data'
+      },
+        version = {
+          'version': 'version'
         },
         auth = {
           'auth': 'auth'
@@ -185,30 +355,32 @@ describe('utils', function() {
           'opt': 'opt'
         };
 
-      mp_utils.buildAddCardXML(data, auth, xmlOpts);
+      mp_utils.buildReturnPaymentXML(data, version, auth, xmlOpts);
 
       assert.ok(fn_formatObject.calledOnce);
-      assert.ok(fn_formatObject.calledWithExactly(fixedData, models.addCard));
+      assert.ok(fn_formatObject.calledWithExactly(data, models.returnPayment));
 
       assert.ok(xml2js.Builder.calledOnce);
       assert.ok(xml2js.Builder.calledWithExactly(xmlOpts));
 
       assert.ok(fn_buildObj.calledOnce);
       assert.ok(fn_buildObj.calledWithExactly({
-        'api-request': {
+        'transaction-request': {
+          version: version,
           verification: auth,
-          command: 'add-card-onfile',
-          request: formattedObj
+          order: {
+            return: formattedObj
+          }
         }
       }));
     });
 
-    it('buildAddCardXML with month < 10', function() {
+    it('buildRecurringPaymentXML', function () {
       var data = {
-          'expirationMonth': 1
-        },
-        fixedData = {
-          'expirationMonth': '01'
+        'data': 'data'
+      },
+        version = {
+          'version': 'version'
         },
         auth = {
           'auth': 'auth'
@@ -217,28 +389,29 @@ describe('utils', function() {
           'opt': 'opt'
         };
 
-      mp_utils.buildAddCardXML(data, auth, xmlOpts);
+      mp_utils.buildRecurringPaymentXML(data, version, auth, xmlOpts);
 
       assert.ok(fn_formatObject.calledOnce);
-      assert.ok(fn_formatObject.calledWithExactly(fixedData, models.addCard));
+      assert.ok(fn_formatObject.calledWithExactly(data, models.recurringPayment));
 
       assert.ok(xml2js.Builder.calledOnce);
       assert.ok(xml2js.Builder.calledWithExactly(xmlOpts));
 
       assert.ok(fn_buildObj.calledOnce);
       assert.ok(fn_buildObj.calledWithExactly({
-        'api-request': {
+        'transaction-request': {
+          version: version,
           verification: auth,
-          command: 'add-card-onfile',
-          request: formattedObj
+          order: {
+            recurringPayment: formattedObj
+          }
         }
       }));
     });
-
-    it('buildDeleteCardXML', function() {
+    it('buildUpdateRecurringPaymentXML', function () {
       var data = {
-          'data': 'data'
-        },
+        'data': 'data'
+      },
         auth = {
           'auth': 'auth'
         },
@@ -246,10 +419,10 @@ describe('utils', function() {
           'opt': 'opt'
         };
 
-      mp_utils.buildDeleteCardXML(data, auth, xmlOpts);
+      mp_utils.buildUpdateRecurringPaymentXML(data, auth, xmlOpts);
 
       assert.ok(fn_formatObject.calledOnce);
-      assert.ok(fn_formatObject.calledWithExactly(data, models.deleteCard));
+      assert.ok(fn_formatObject.calledWithExactly(data, models.updateRecurringPayment));
 
       assert.ok(xml2js.Builder.calledOnce);
       assert.ok(xml2js.Builder.calledWithExactly(xmlOpts));
@@ -258,10 +431,39 @@ describe('utils', function() {
       assert.ok(fn_buildObj.calledWithExactly({
         'api-request': {
           verification: auth,
-          command: 'delete-card-onfile',
+          command: 'modify-recurring',
           request: formattedObj
         }
       }));
     });
+    it('buildCancelRecurringPaymentXML', function () {
+      var data = {
+        'data': 'data'
+      },
+        auth = {
+          'auth': 'auth'
+        },
+        xmlOpts = {
+          'opt': 'opt'
+        };
+
+      mp_utils.buildCancelRecurringPaymentXML(data, auth, xmlOpts);
+
+      assert.ok(fn_formatObject.calledOnce);
+      assert.ok(fn_formatObject.calledWithExactly(data, models.updateRecurringPayment));
+
+      assert.ok(xml2js.Builder.calledOnce);
+      assert.ok(xml2js.Builder.calledWithExactly(xmlOpts));
+
+      assert.ok(fn_buildObj.calledOnce);
+      assert.ok(fn_buildObj.calledWithExactly({
+        'api-request': {
+          verification: auth,
+          command: 'cancel-recurring',
+          request: formattedObj
+        }
+      }));
+    });
+
   });
 });
